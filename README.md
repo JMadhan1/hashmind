@@ -8,6 +8,8 @@
 
 ### *The AI agent that puts its money where its mouth is — on-chain.*
 
+[![Live Demo](https://img.shields.io/badge/LIVE%20DEMO-mantle--mind.vercel.app-00E676?style=for-the-badge&logo=vercel&logoColor=black)](https://mantle-mind.vercel.app)
+[![Demo Video](https://img.shields.io/badge/Demo%20Video-YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://www.youtube.com/watch?v=iMkG1mTcbN4)
 [![Mantle Sepolia](https://img.shields.io/badge/Mantle-Sepolia%205003-00D4FF?style=for-the-badge&logo=ethereum&logoColor=white)](https://explorer.sepolia.mantle.xyz)
 [![Groq AI](https://img.shields.io/badge/Groq-llama--3.3--70b-C9A84C?style=for-the-badge&logo=lightning&logoColor=white)](https://groq.com)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.110-1B7A51?style=for-the-badge&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
@@ -240,8 +242,8 @@ cd contract && python deploy.py
 ### 🌐 Production Deployment
 | Service | Config |
 |:---:|:---|
-| **Backend** | [Render](https://render.com) → connect repo → `render.yaml` auto-configures everything |
-| **Frontend** | [Vercel](https://vercel.com) → import repo → set root dir to `frontend/` → done |
+| **Backend** | [Render](https://render.com) → `https://mantlemind-sxdd.onrender.com` |
+| **Frontend** | [Vercel](https://vercel.com) → **[mantle-mind.vercel.app](https://mantle-mind.vercel.app)** ✅ Live |
 
 ---
 
@@ -258,6 +260,10 @@ cd contract && python deploy.py
 ---
 
 <div align="center">
+
+**🌐 [mantle-mind.vercel.app](https://mantle-mind.vercel.app)** — try it live, no wallet needed
+
+**▶️ [Watch Demo on YouTube](https://www.youtube.com/watch?v=iMkG1mTcbN4)**
 
 **Built on [Mantle Network](https://mantle.xyz)** · **Powered by [Groq AI](https://groq.com)** · **Turing Test Hackathon 2026**
 
