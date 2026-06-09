@@ -131,6 +131,63 @@ Generate 3 personalized, data-grounded DeFi recommendations. Return only the JSO
 
         return best, reasoning
 
+    async def ask(self, question: str, wallet_data: Optional[Dict] = None) -> str:
+        """
+        Conversational Q&A — answers a natural language question about Mantle DeFi.
+        Covers real user pain points: IL, liquidation risk, yield comparison,
+        veMNT, rebalancing, gas, bridging, new user onboarding, and more.
+        Returns a plain-text conversational answer (not JSON).
+        """
+        protocol_data = await fetch_protocol_data()
+        protocol_context = format_for_prompt(protocol_data)
+
+        wallet_context = ""
+        if wallet_data:
+            wallet_context = f"""
+The user's wallet context:
+- Address: {wallet_data.get('wallet_address', 'unknown')}
+- MNT Balance: {wallet_data.get('balance_mnt', 0):.4f} MNT
+- Risk Profile: {wallet_data.get('risk_profile', 'unknown')}
+- Activity Level: {wallet_data.get('activity_level', 'unknown')}
+- Tx Count: {wallet_data.get('total_tx_count', 0)}
+- Token Balances: {json.dumps(wallet_data.get('tokens', {}), indent=2)}
+"""
+
+        system_prompt = f"""You are MantleMind, an expert AI advisor for the Mantle Network DeFi ecosystem. You answer user questions conversationally, clearly, and concisely.
+
+{protocol_context}
+
+You are an expert on these real user pain points on Mantle:
+1. Impermanent Loss (IL) — how it works in Merchant Moe LPs, when it hurts vs. helps
+2. Liquidation Risk — Agni Finance health factor, safe collateral ratios, how to avoid liquidation
+3. Yield Comparison — how to fairly compare mETH APY vs MNT staking vs Agni supply APY after risk
+4. veMNT Governance — lock duration, boost multipliers, governance voting power, whether it's worth it
+5. Portfolio Rebalancing — when to take profits, how to rebalance MNT/ETH/stablecoins
+6. Gas Optimization — when gas is cheapest on Mantle, how to batch transactions
+7. Bridging — cheapest routes to move assets to Mantle, official bridge vs aggregators
+8. New User Onboarding — best first steps with 100 MNT, how to start earning safely
+9. mETH vs Native Staking — tradeoffs, liquidity, slashing risk, compounding differences
+10. DeFi Tax Tracking — which transactions are taxable events, tools for tracking
+
+{wallet_context}
+
+Answer the user's question in 2-4 sentences. Be specific, cite actual APYs or rates when relevant. Do not give generic advice — always anchor to Mantle protocols. If you don't know something specific, say so honestly."""
+
+        try:
+            response = self.client.chat.completions.create(
+                model=self.model,
+                messages=[
+                    {"role": "system", "content": system_prompt},
+                    {"role": "user", "content": question},
+                ],
+                temperature=0.5,
+                max_tokens=400,
+            )
+            return response.choices[0].message.content.strip()
+        except Exception as e:
+            print(f"Groq ask error: {e}")
+            return "I'm having trouble connecting right now. Please try again in a moment."
+
     def _format(self, recs: List[Dict]) -> List[Dict]:
         return [
             {

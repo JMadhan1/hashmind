@@ -1,84 +1,173 @@
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import axios from 'axios'
 
+const QUICK_QUESTIONS = [
+  { label: 'Am I losing to IL?',       q: 'How does impermanent loss work in Merchant Moe LPs and when should I be worried?' },
+  { label: 'Liquidation risk?',         q: 'What health factor should I maintain on Agni Finance to avoid liquidation?' },
+  { label: 'mETH vs MNT staking?',     q: 'Which is better right now — staking MNT natively or using mETH liquid staking?' },
+  { label: 'veMNT worth it?',           q: 'Is locking MNT for veMNT worth it? What boosts and governance power do I get?' },
+  { label: 'Best yields now?',          q: 'What are the best yield opportunities on Mantle right now with the lowest risk?' },
+  { label: 'When to rebalance?',        q: 'My MNT has pumped a lot. Should I take profits or add more to a liquidity pool?' },
+  { label: 'Bridge to Mantle?',         q: 'What is the cheapest and fastest way to bridge assets to Mantle?' },
+  { label: 'New to Mantle DeFi?',       q: 'I just got 100 MNT. What should I do first to start earning safely?' },
+  { label: 'Gas cheapest when?',        q: 'When is gas cheapest on Mantle and how do I optimize my transaction costs?' },
+  { label: 'Track DeFi taxes?',         q: 'How do I track my DeFi activity on Mantle for tax purposes?' },
+]
+
 function AIAdvisor({ walletAddress }) {
-  const [question, setQuestion] = useState('')
-  const [response, setResponse] = useState(null)
+  const [input, setInput]     = useState('')
+  const [messages, setMessages] = useState([
+    {
+      role: 'ai',
+      text: "Hey! I'm your MantleMind AI advisor. Ask me anything about Mantle DeFi — impermanent loss, liquidation risk, yield comparison, veMNT, bridging, or just what to do with your MNT. Try a quick question below ↓",
+    }
+  ])
   const [loading, setLoading] = useState(false)
-  const [error, setError] = useState(null)
+  const bottomRef = useRef(null)
 
-  const handleAsk = async (e) => {
-    e.preventDefault()
-    if (!question.trim() || !walletAddress) return
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
+  }, [messages, loading])
 
+  const sendQuestion = async (q) => {
+    const question = q || input.trim()
+    if (!question || loading) return
+    setInput('')
+    setMessages(prev => [...prev, { role: 'user', text: question }])
     setLoading(true)
-    setError(null)
-    setResponse(null)
-
     try {
-      const result = await axios.post('/api/advise', {
-        wallet_address: walletAddress,
-        context: question
+      const { data } = await axios.post('/api/ask', {
+        question,
+        wallet_address: walletAddress || null,
       })
-
-      setResponse(result.data)
-    } catch (err) {
-      console.error('Error asking AI:', err)
-      setError('Failed to get AI response. Please try again.')
+      setMessages(prev => [...prev, { role: 'ai', text: data.answer }])
+    } catch {
+      setMessages(prev => [...prev, { role: 'ai', text: 'Backend is waking up — this can take ~30s on the free tier. Please try again in a moment.', error: true }])
     } finally {
       setLoading(false)
     }
   }
 
+  const handleSubmit = (e) => { e.preventDefault(); sendQuestion() }
+
   return (
-    <div className="glass-card p-6">
-      <h3 className="text-xl font-bold font-syne mb-4 text-accent">Ask AI Advisor</h3>
-      
-      <form onSubmit={handleAsk} className="mb-4">
-        <div className="flex gap-2">
-          <input
-            type="text"
-            value={question}
-            onChange={(e) => setQuestion(e.target.value)}
-            placeholder="Ask a DeFi question about your wallet..."
-            className="flex-1 px-4 py-3 rounded-lg bg-background/50 border border-accent/30 text-text-primary placeholder-text-secondary focus:outline-none focus:border-accent transition-colors"
-            disabled={loading}
-          />
-          <button
-            type="submit"
-            disabled={loading || !question.trim()}
-            className="btn-primary px-6"
-          >
-            {loading ? (
-              <div className="spinner w-4 h-4 border-2"></div>
-            ) : (
-              'Ask'
-            )}
-          </button>
-        </div>
-      </form>
+    <div className="bento-card" style={{ padding: 0, overflow: 'hidden' }}>
 
-      {error && (
-        <div className="p-3 rounded-lg bg-red-500/10 border border-red-500/30 text-red-400 text-sm mb-4">
-          {error}
-        </div>
-      )}
+      {/* Header */}
+      <div style={{
+        padding: '16px 22px 14px',
+        borderBottom: '1px solid rgba(201,168,76,0.10)',
+        display: 'flex', alignItems: 'center', gap: 10,
+      }}>
+        <div style={{
+          width: 8, height: 8, borderRadius: '50%', background: '#1B7A51',
+          boxShadow: '0 0 6px #1B7A51', flexShrink: 0,
+        }} />
+        <span style={{ fontSize: 9, color: '#7B7368', fontFamily: '"JetBrains Mono",monospace', letterSpacing: '0.20em', textTransform: 'uppercase' }}>
+          AI Advisor · Mantle DeFi Expert
+        </span>
+        {walletAddress && (
+          <span style={{ marginLeft: 'auto', fontSize: 9, color: '#1B7A51', fontFamily: '"JetBrains Mono",monospace', letterSpacing: '0.1em' }}>
+            ● wallet context active
+          </span>
+        )}
+      </div>
 
-      {response && response.recommendations && (
-        <div className="space-y-4">
-          <p className="text-text-secondary text-sm">Here are personalized recommendations:</p>
-          {response.recommendations.map((rec, index) => (
-            <div key={index} className="p-4 rounded-lg bg-accent/5 border border-accent/10">
-              <p className="font-semibold text-text-primary mb-2">{rec.action}</p>
-              <p className="text-sm text-text-secondary mb-2">{rec.reasoning}</p>
-              <div className="flex items-center gap-4 text-xs">
-                <span className="text-accent">Confidence: {rec.confidence}%</span>
-                <span className="text-accent-secondary">Protocol: {rec.specific_protocol}</span>
-              </div>
+      {/* Chat window */}
+      <div style={{ padding: '16px 20px', maxHeight: 320, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: 12 }}>
+        {messages.map((msg, i) => (
+          <div key={i} style={{ display: 'flex', justifyContent: msg.role === 'user' ? 'flex-end' : 'flex-start' }}>
+            <div style={{
+              maxWidth: '80%',
+              padding: '10px 14px',
+              borderRadius: msg.role === 'user' ? '12px 12px 2px 12px' : '12px 12px 12px 2px',
+              background: msg.role === 'user'
+                ? 'rgba(201,168,76,0.12)'
+                : msg.error ? 'rgba(217,83,79,0.08)' : 'rgba(255,255,255,0.03)',
+              border: `1px solid ${msg.role === 'user' ? 'rgba(201,168,76,0.22)' : msg.error ? 'rgba(217,83,79,0.20)' : 'rgba(255,255,255,0.07)'}`,
+              fontSize: 13,
+              color: msg.role === 'user' ? '#C9A84C' : msg.error ? '#D9534F' : '#C8C2B8',
+              fontFamily: msg.role === 'user' ? '"Space Grotesk",sans-serif' : '"Space Grotesk",sans-serif',
+              lineHeight: 1.65,
+            }}>
+              {msg.text}
             </div>
-          ))}
-        </div>
-      )}
+          </div>
+        ))}
+        {loading && (
+          <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
+            <div style={{
+              padding: '10px 16px', borderRadius: '12px 12px 12px 2px',
+              background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)',
+              display: 'flex', gap: 5, alignItems: 'center',
+            }}>
+              {[0,1,2].map(i => (
+                <span key={i} style={{
+                  width: 5, height: 5, borderRadius: '50%',
+                  background: '#C9A84C', opacity: 0.7,
+                  animation: `pulse-glow 1.2s ease-in-out ${i * 0.2}s infinite`,
+                  display: 'inline-block',
+                }} />
+              ))}
+            </div>
+          </div>
+        )}
+        <div ref={bottomRef} />
+      </div>
+
+      {/* Quick questions */}
+      <div style={{ padding: '0 20px 14px', display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+        {QUICK_QUESTIONS.slice(0, 5).map((q, i) => (
+          <button key={i} onClick={() => sendQuestion(q.q)} disabled={loading}
+            style={{
+              fontSize: 9, padding: '4px 10px', borderRadius: 100, cursor: 'pointer',
+              background: 'rgba(201,168,76,0.06)', border: '1px solid rgba(201,168,76,0.18)',
+              color: '#7B7368', fontFamily: '"JetBrains Mono",monospace', letterSpacing: '0.08em',
+              transition: 'all 0.2s', outline: 'none',
+            }}
+            onMouseOver={e => { e.target.style.borderColor = 'rgba(201,168,76,0.45)'; e.target.style.color = '#C9A84C' }}
+            onMouseOut={e => { e.target.style.borderColor = 'rgba(201,168,76,0.18)'; e.target.style.color = '#7B7368' }}
+          >{q.label}</button>
+        ))}
+        {QUICK_QUESTIONS.slice(5).map((q, i) => (
+          <button key={i+5} onClick={() => sendQuestion(q.q)} disabled={loading}
+            style={{
+              fontSize: 9, padding: '4px 10px', borderRadius: 100, cursor: 'pointer',
+              background: 'rgba(11,189,202,0.05)', border: '1px solid rgba(11,189,202,0.15)',
+              color: '#7B7368', fontFamily: '"JetBrains Mono",monospace', letterSpacing: '0.08em',
+              transition: 'all 0.2s', outline: 'none',
+            }}
+            onMouseOver={e => { e.target.style.borderColor = 'rgba(11,189,202,0.40)'; e.target.style.color = '#0BBDCA' }}
+            onMouseOut={e => { e.target.style.borderColor = 'rgba(11,189,202,0.15)'; e.target.style.color = '#7B7368' }}
+          >{q.label}</button>
+        ))}
+      </div>
+
+      {/* Input */}
+      <form onSubmit={handleSubmit} style={{
+        padding: '12px 16px',
+        borderTop: '1px solid rgba(255,255,255,0.05)',
+        display: 'flex', gap: 10, alignItems: 'center',
+      }}>
+        <input
+          value={input}
+          onChange={e => setInput(e.target.value)}
+          placeholder="Ask anything about Mantle DeFi…"
+          disabled={loading}
+          style={{
+            flex: 1, background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)',
+            borderRadius: 8, padding: '10px 14px', color: '#E8E2D8', fontSize: 13,
+            fontFamily: '"Space Grotesk",sans-serif', outline: 'none',
+            transition: 'border-color 0.2s',
+          }}
+          onFocus={e => e.target.style.borderColor = 'rgba(201,168,76,0.40)'}
+          onBlur={e => e.target.style.borderColor = 'rgba(255,255,255,0.08)'}
+        />
+        <button type="submit" disabled={loading || !input.trim()} className="btn-primary"
+          style={{ padding: '10px 18px', fontSize: 12, flexShrink: 0 }}>
+          {loading ? <div className="spinner" style={{ width: 13, height: 13, borderWidth: 2 }} /> : 'Ask →'}
+        </button>
+      </form>
     </div>
   )
 }

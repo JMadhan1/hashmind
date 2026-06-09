@@ -59,6 +59,10 @@ class LogOnChainRequest(BaseModel):
     confidence: int
     private_key: Optional[str] = None
 
+class AskRequest(BaseModel):
+    question: str
+    wallet_address: Optional[str] = None
+
 class AgentRunRequest(BaseModel):
     wallet_address: str
     private_key: Optional[str] = None
@@ -103,6 +107,23 @@ async def get_advice(request: AdviseRequest):
         }
     except Exception as e:
         print(f"Error getting advice: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.post("/ask")
+async def ask_advisor(request: AskRequest):
+    try:
+        if not request.question.strip():
+            raise HTTPException(status_code=400, detail="Question cannot be empty")
+        wallet_data = None
+        if request.wallet_address and request.wallet_address.startswith("0x"):
+            try:
+                wallet_data = await wallet_analyzer.analyze(request.wallet_address)
+            except Exception:
+                pass
+        answer = await defi_advisor.ask(request.question, wallet_data)
+        return {"answer": answer}
+    except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
 
