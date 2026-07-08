@@ -123,14 +123,11 @@ function App() {
             style={{ display: 'flex', alignItems: 'center', gap: 10, flexShrink: 0, cursor: 'pointer' }}
             onClick={() => { setCurrentView('home'); setWalletAddress(null) }}
           >
-            <div style={{
-              width: 36, height: 36, borderRadius: 8, flexShrink: 0,
-              background: 'linear-gradient(135deg, #A8832A 0%, #E0C06A 100%)',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              boxShadow: '0 0 16px rgba(201,168,76,0.40)',
-            }}>
-              <span style={{ color: '#07080C', fontWeight: 800, fontSize: 17, fontFamily: '"Space Grotesk",sans-serif' }}>H</span>
-            </div>
+            <img
+              src="/logo.png"
+              alt="HashMind"
+              style={{ width: 36, height: 36, borderRadius: 8, flexShrink: 0, objectFit: 'cover', boxShadow: '0 0 16px rgba(201,168,76,0.35)' }}
+            />
             <div>
               <div style={{ fontWeight: 700, fontSize: 15, fontFamily: '"Space Grotesk",sans-serif', letterSpacing: '-0.02em', color: '#E8E2D8' }}>HashMind</div>
               <div style={{ fontSize: 9, color: '#7B7368', fontFamily: '"JetBrains Mono",monospace', letterSpacing: '0.10em', textTransform: 'uppercase' }}>Triple-Agent · HSP · Chain 177</div>
