@@ -1,6 +1,8 @@
 import { useState, useRef, useEffect } from 'react'
 import axios from 'axios'
 
+const API_BASE = 'https://hashmind.onrender.com'
+
 const QUICK_QUESTIONS = [
   { label: 'Am I losing to IL?',       q: 'How does impermanent loss work in veHSK LPs and when should I be worried?' },
   { label: 'Liquidation risk?',         q: 'What health factor should I maintain on WoofSwap to avoid liquidation?' },
@@ -36,7 +38,7 @@ function AIAdvisor({ walletAddress }) {
     setMessages(prev => [...prev, { role: 'user', text: question }])
     setLoading(true)
     try {
-      const { data } = await axios.post('/api/ask', {
+      const { data } = await axios.post(`${API_BASE}/ask`, {
         question,
         wallet_address: walletAddress || null,
       }, { timeout: 90000 })
