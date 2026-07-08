@@ -281,13 +281,15 @@ function ConsensusResult({ consensus, txHash, explorerUrl, isMock, isLogging, on
 }
 
 function ConsensusPanel({ walletAddress, onComplete }) {
-  const [loading,    setLoading]    = useState(false)
-  const [result,     setResult]     = useState(null)
-  const [txHash,     setTxHash]     = useState(null)
-  const [explorerUrl,setExplorerUrl]= useState(null)
-  const [isMock,     setIsMock]     = useState(false)
-  const [isLogging,  setIsLogging]  = useState(false)
-  const [error,      setError]      = useState(null)
+  const [loading,      setLoading]      = useState(false)
+  const [result,       setResult]       = useState(null)
+  const [txHash,       setTxHash]       = useState(null)
+  const [explorerUrl,  setExplorerUrl]  = useState(null)
+  const [isMock,       setIsMock]       = useState(false)
+  const [isLogging,    setIsLogging]    = useState(false)
+  const [hspResult,    setHspResult]    = useState(null)
+  const [isHSPRunning, setIsHSPRunning] = useState(false)
+  const [error,        setError]        = useState(null)
 
   const runConsensus = async () => {
     setLoading(true)
@@ -304,6 +306,24 @@ function ConsensusPanel({ walletAddress, onComplete }) {
       setError('Agent consensus failed. Please try again.')
     } finally {
       setLoading(false)
+    }
+  }
+
+  const executeHSP = async () => {
+    if (!result) return
+    setIsHSPRunning(true)
+    try {
+      const r = await axios.post('/api/hsp-execute', {
+        wallet_address:        walletAddress,
+        final_action:          result.consensus.final_action,
+        aggregated_confidence: result.consensus.aggregated_confidence,
+        amount_hsk:            0.1,
+      })
+      setHspResult(r.data)
+    } catch (e) {
+      setError('HSP execution failed. Please retry.')
+    } finally {
+      setIsHSPRunning(false)
     }
   }
 
@@ -417,6 +437,90 @@ function ConsensusPanel({ walletAddress, onComplete }) {
             isLogging={isLogging}
             onLog={logOnChain}
           />
+
+          {/* HSP Execution Step — appears after on-chain log */}
+          {txHash && result.consensus?.reached && !hspResult && (
+            <div style={{
+              marginTop: 12,
+              padding: '16px 18px',
+              borderRadius: 12,
+              background: 'rgba(201,168,76,0.04)',
+              border: '1px solid rgba(201,168,76,0.25)',
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
+                <span style={{ fontSize: 18 }}>⚡</span>
+                <div>
+                  <div style={{ color: '#C9A84C', fontWeight: 700, fontSize: 13 }}>Execute via HSP Settlement</div>
+                  <div style={{ color: '#7B7368', fontSize: 11 }}>Consensus verified · Submit signal to HashKey Settlement Protocol</div>
+                </div>
+              </div>
+              <button
+                onClick={executeHSP}
+                disabled={isHSPRunning}
+                style={{
+                  width: '100%', padding: '11px 0', borderRadius: 8,
+                  border: '1px solid rgba(201,168,76,0.40)',
+                  background: isHSPRunning ? 'rgba(201,168,76,0.05)' : 'rgba(201,168,76,0.12)',
+                  color: '#C9A84C', fontWeight: 700, fontSize: 13,
+                  cursor: isHSPRunning ? 'not-allowed' : 'pointer',
+                  fontFamily: '"JetBrains Mono", monospace', letterSpacing: '0.06em',
+                }}
+              >
+                {isHSPRunning ? '⏳ Submitting to HSP...' : '⚡ Submit to HSP'}
+              </button>
+            </div>
+          )}
+
+          {/* HSP Settlement Result */}
+          {hspResult && (
+            <div style={{
+              marginTop: 12, padding: '16px 18px', borderRadius: 12,
+              background: 'rgba(201,168,76,0.06)', border: '1px solid rgba(201,168,76,0.30)',
+              position: 'relative', overflow: 'hidden',
+            }}>
+              <div style={{
+                position: 'absolute', top: 0, left: 0, right: 0, height: 2,
+                background: 'linear-gradient(90deg, transparent, #C9A84C80, transparent)',
+              }} />
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
+                <span style={{ fontSize: 20 }}>✅</span>
+                <div>
+                  <div style={{ color: '#C9A84C', fontWeight: 700, fontSize: 13 }}>HSP Settlement Order Created</div>
+                  <div style={{ color: '#7B7368', fontSize: 11 }}>3-agent consensus → HSP payment protocol</div>
+                </div>
+              </div>
+              <div style={{
+                display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginBottom: 10,
+                fontFamily: '"JetBrains Mono", monospace', fontSize: 11,
+              }}>
+                <div style={{ padding: '8px 10px', background: 'rgba(0,0,0,0.2)', borderRadius: 6 }}>
+                  <div style={{ color: '#7B7368', marginBottom: 3 }}>HSP Order ID</div>
+                  <div style={{ color: '#E8E2D8', fontSize: 10 }}>{hspResult.hsp_order_id}</div>
+                </div>
+                <div style={{ padding: '8px 10px', background: 'rgba(0,0,0,0.2)', borderRadius: 6 }}>
+                  <div style={{ color: '#7B7368', marginBottom: 3 }}>Action</div>
+                  <div style={{ color: '#E8E2D8', fontSize: 10 }}>{hspResult.final_action?.slice(0, 32)}</div>
+                </div>
+              </div>
+              <div style={{
+                padding: '8px 10px', background: 'rgba(0,0,0,0.2)', borderRadius: 6,
+                fontFamily: '"JetBrains Mono", monospace', fontSize: 10,
+                color: '#7B7368', wordBreak: 'break-all', marginBottom: 8,
+              }}>
+                Tx: {hspResult.tx_hash?.slice(0, 28)}...{hspResult.tx_hash?.slice(-6)}
+              </div>
+              <div style={{ fontSize: 10, color: '#7B7368', fontStyle: 'italic' }}>
+                {hspResult.note}
+              </div>
+              <a
+                href={hspResult.explorer_url}
+                target="_blank" rel="noopener noreferrer"
+                style={{ color: '#0BBDCA', fontSize: 11, display: 'block', marginTop: 8 }}
+              >
+                View HSP execution on HashKey Explorer ↗
+              </a>
+            </div>
+          )}
 
           {/* Re-run */}
           <button

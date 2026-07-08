@@ -165,6 +165,37 @@ class HashKeyClient:
             "created_at": 0, "source": "default",
         }
 
+    async def call_execute_with_hsp(
+        self,
+        private_key: str,
+        hsp_order_id: bytes,
+        amount_wei: int,
+    ) -> str:
+        """Call executeWithHSP() on HashMind.sol — on-chain proof of HSP settlement."""
+        if not self.contract:
+            raise Exception("Contract not deployed")
+
+        account   = self.w3.eth.account.from_key(private_key)
+        nonce     = _retry_call(self.w3.eth.get_transaction_count, account.address)
+        gas_price = _retry_call(lambda: self.w3.eth.gas_price)
+
+        fn  = self.contract.functions.executeWithHSP(hsp_order_id, amount_wei)
+        gas = fn.estimate_gas({"from": account.address})
+        tx  = fn.build_transaction({
+            "gas":      int(gas * 1.2),
+            "gasPrice": gas_price,
+            "nonce":    nonce,
+            "chainId":  self.chain_id,
+        })
+
+        signed  = self.w3.eth.account.sign_transaction(tx, private_key)
+        tx_hash = _retry_call(self.w3.eth.send_raw_transaction, signed.raw_transaction)
+        receipt = self.w3.eth.wait_for_transaction_receipt(tx_hash, timeout=60)
+
+        if receipt["status"] == 1:
+            return tx_hash.hex()
+        raise Exception("executeWithHSP transaction reverted")
+
     # ── Network info ───────────────────────────────────────────────────────────
 
     def explorer_tx(self, tx_hash: str) -> str:

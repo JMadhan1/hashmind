@@ -21,8 +21,11 @@ const PROTOCOLS = [
   { name: 'veHSK Governance',     icon: '◈' },
   { name: 'WoofSwap DEX',         icon: '◉' },
   { name: 'HSK Native Staking',   icon: '○' },
-  { name: 'HashKey Chain',        icon: '●' },
+  { name: 'HSP Settlement',       icon: '⚡' },
+  { name: 'HashKey Chain 177',    icon: '●' },
   { name: 'AlphaAgent',           icon: '◎' },
+  { name: 'YieldAgent',           icon: '◈' },
+  { name: 'GuardAgent',           icon: '◉' },
 ]
 
 const STEPS = [
@@ -42,7 +45,7 @@ const STEPS = [
         <path d="M12 2a7 7 0 0 1 7 7c0 2.38-1.19 4.47-3 5.74V17a2 2 0 0 1-2 2H10a2 2 0 0 1-2-2v-2.26C6.19 13.47 5 11.38 5 9a7 7 0 0 1 7-7z"/><path d="M10 21h4"/>
       </svg>
     ),
-    desc: 'Three specialist AI agents — AlphaAgent, YieldAgent, GuardAgent — independently analyse market, yield, and risk.',
+    desc: 'AlphaAgent reads on-chain metrics. YieldAgent finds best APY. GuardAgent reviews risk. All three vote independently.',
   },
   {
     num: '03', title: 'Consensus', color: '#1B7A51',
@@ -60,7 +63,16 @@ const STEPS = [
         <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
       </svg>
     ),
-    desc: 'All 3 agent votes are written to HashMind.sol on HashKey Chain — immutable, auditable, forever.',
+    desc: 'All 3 votes written to HashMind.sol on HashKey Chain Mainnet. Immutable. Auditable. Forever. Anyone can verify.',
+  },
+  {
+    num: '05', title: 'HSP Settle', color: '#E05A3A',
+    icon: (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+      </svg>
+    ),
+    desc: 'Consensus confirmed on-chain → executeWithHSP() fires. Capital moves only after cryptographic proof of 3-agent agreement.',
   },
 ]
 
@@ -117,11 +129,11 @@ function App() {
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               boxShadow: '0 0 16px rgba(201,168,76,0.40)',
             }}>
-              <span style={{ color: '#07080C', fontWeight: 800, fontSize: 17, fontFamily: '"Space Grotesk",sans-serif' }}>M</span>
+              <span style={{ color: '#07080C', fontWeight: 800, fontSize: 17, fontFamily: '"Space Grotesk",sans-serif' }}>H</span>
             </div>
             <div>
               <div style={{ fontWeight: 700, fontSize: 15, fontFamily: '"Space Grotesk",sans-serif', letterSpacing: '-0.02em', color: '#E8E2D8' }}>HashMind</div>
-              <div style={{ fontSize: 9, color: '#7B7368', fontFamily: '"JetBrains Mono",monospace', letterSpacing: '0.10em', textTransform: 'uppercase' }}>AI Agent · HashKey Chain</div>
+              <div style={{ fontSize: 9, color: '#7B7368', fontFamily: '"JetBrains Mono",monospace', letterSpacing: '0.10em', textTransform: 'uppercase' }}>Triple-Agent · HSP · Chain 177</div>
             </div>
           </div>
 
@@ -180,7 +192,7 @@ function App() {
                 {/* Live badge */}
                 <div className="neon-badge animate-fade-in" style={{ marginBottom: 36 }}>
                   <span className="live-dot" />
-                  LIVE ON HASHKEY CHAIN MAINNET · CONTRACT DEPLOYED
+                  LIVE ON HASHKEY CHAIN MAINNET · HSP INTEGRATED · CONTRACT DEPLOYED
                 </div>
 
                 {/* Serif display heading — Trend 1: institutional typography */}
@@ -214,17 +226,36 @@ function App() {
                   HashMind
                 </h1>
 
-                <p style={{ color: '#7B7368', maxWidth: 540, fontSize: 15, lineHeight: 1.78, marginBottom: 48 }}>
-                  The first AI agent that builds a{' '}
-                  <span style={{ color: '#C9A84C', fontWeight: 600 }}>verifiable on-chain reputation</span>.
-                  {' '}Every recommendation — confidence score, reasoning, proof — stored permanently on HashKey Chain.
+                <p style={{ color: '#7B7368', maxWidth: 560, fontSize: 15, lineHeight: 1.78, marginBottom: 24 }}>
+                  <span style={{ color: '#C9A84C', fontWeight: 600 }}>3 AI agents must agree</span> before any trade signal fires.
+                  {' '}AlphaAgent, YieldAgent, and GuardAgent vote independently — 2-of-3 EXECUTE required.
                   <br /><br />
-                  <span style={{ color: '#3E3A36', fontSize: 13 }}>
-                    Not just AI advice.{' '}
-                    <span style={{ color: '#0BBDCA', fontWeight: 600 }}>Cryptographic proof</span>
-                    {' '}of AI advice — auditable by anyone, forever.
-                  </span>
+                  Every vote is <span style={{ color: '#0BBDCA', fontWeight: 600 }}>immutably on-chain</span> before the outcome is known.
+                  {' '}Then and only then does{' '}
+                  <span style={{ color: '#E05A3A', fontWeight: 600 }}>HSP settlement</span> fire.
                 </p>
+
+                {/* Live Contract address */}
+                <div style={{
+                  display: 'flex', alignItems: 'center', gap: 10, marginBottom: 40,
+                  padding: '10px 18px', borderRadius: 10,
+                  background: 'rgba(11,189,202,0.05)', border: '1px solid rgba(11,189,202,0.18)',
+                  fontFamily: '"JetBrains Mono", monospace', fontSize: 11,
+                  flexWrap: 'wrap', justifyContent: 'center',
+                }}>
+                  <span style={{ color: '#7B7368' }}>Contract live:</span>
+                  <a
+                    href="https://hsk.blockscout.com/address/0xCDb15987099FBFC1e61563F39C138dF9635c273B"
+                    target="_blank" rel="noopener noreferrer"
+                    style={{ color: '#0BBDCA', textDecoration: 'none', letterSpacing: '0.03em' }}
+                  >
+                    0xCDb1...273B
+                  </a>
+                  <span style={{ color: 'rgba(201,168,76,0.3)' }}>·</span>
+                  <span style={{ color: '#C9A84C' }}>Chain 177</span>
+                  <span style={{ color: 'rgba(201,168,76,0.3)' }}>·</span>
+                  <span style={{ color: '#00E676' }}>● MAINNET</span>
+                </div>
 
                 {/* Live stats terminal — Trend 4: High-Disclosure UX */}
                 {liveStats && (
@@ -344,6 +375,77 @@ function App() {
               </div>
             </section>
 
+            {/* ══════ AGENT VOTE VISUALIZER ══════════════════════ */}
+            <section style={{ padding: '80px 24px', borderTop: '1px solid rgba(201,168,76,0.07)', background: 'rgba(0,0,0,0.18)' }}>
+              <div style={{ maxWidth: 960, margin: '0 auto' }}>
+                <div style={{ textAlign: 'center', marginBottom: 44 }}>
+                  <div className="section-eyebrow" style={{ marginBottom: 14 }}>TRIPLE-AGENT CONSENSUS ENGINE</div>
+                  <h2 style={{ fontSize: 'clamp(1.4rem,3vw,2rem)', fontWeight: 700, letterSpacing: '-0.025em', fontFamily: '"Space Grotesk",sans-serif', color: '#E8E2D8' }}>
+                    No Single AI Controls Your Capital
+                  </h2>
+                </div>
+
+                {/* Agent vote cards */}
+                <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', justifyContent: 'center', marginBottom: 28 }}>
+                  {[
+                    { name: 'AlphaAgent', role: 'Market Signal', icon: '📡', color: '#0BBDCA', vote: 'EXECUTE', conf: 82, signal: 'On-chain activity up 34% · accumulate HSK' },
+                    { name: 'YieldAgent', role: 'Yield Optimiser', icon: '⚡', color: '#C9A84C', vote: 'EXECUTE', conf: 78, signal: 'stHSK APY 8.4% · add liquidity to stHSK pool' },
+                    { name: 'GuardAgent', role: 'Risk Assessment', icon: '🛡', color: '#8B5CF6', vote: 'DEFER',   conf: 55, signal: 'Portfolio at 62% exposure · monitor for 24h' },
+                  ].map(agent => (
+                    <div key={agent.name} style={{
+                      flex: '1 1 260px', maxWidth: 300,
+                      padding: '20px', borderRadius: 12,
+                      background: 'rgba(255,255,255,0.02)',
+                      border: `1px solid ${agent.color}28`,
+                      position: 'relative', overflow: 'hidden',
+                    }}>
+                      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 2, background: `linear-gradient(90deg, transparent, ${agent.color}80, transparent)` }} />
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 14 }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                          <span style={{ fontSize: 18 }}>{agent.icon}</span>
+                          <div>
+                            <div style={{ color: agent.color, fontWeight: 700, fontSize: 13 }}>{agent.name}</div>
+                            <div style={{ color: '#7B7368', fontSize: 10 }}>{agent.role}</div>
+                          </div>
+                        </div>
+                        <div style={{
+                          padding: '3px 10px', borderRadius: 20, fontSize: 11, fontWeight: 700,
+                          fontFamily: '"JetBrains Mono",monospace',
+                          background: agent.vote === 'EXECUTE' ? 'rgba(0,230,118,0.12)' : 'rgba(201,168,76,0.12)',
+                          border: `1px solid ${agent.vote === 'EXECUTE' ? 'rgba(0,230,118,0.35)' : 'rgba(201,168,76,0.35)'}`,
+                          color: agent.vote === 'EXECUTE' ? '#00E676' : '#C9A84C',
+                        }}>{agent.vote === 'EXECUTE' ? '✓' : '⏸'} {agent.vote}</div>
+                      </div>
+                      <div style={{ fontSize: 12, color: '#9E9690', marginBottom: 12, lineHeight: 1.5, fontStyle: 'italic' }}>"{agent.signal}"</div>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
+                        <span style={{ fontSize: 10, color: '#7B7368' }}>Confidence</span>
+                        <span style={{ fontSize: 10, color: agent.color, fontFamily: '"JetBrains Mono",monospace', fontWeight: 700 }}>{agent.conf}%</span>
+                      </div>
+                      <div style={{ height: 3, background: 'rgba(255,255,255,0.06)', borderRadius: 2 }}>
+                        <div style={{ height: '100%', width: `${agent.conf}%`, background: `linear-gradient(90deg, ${agent.color}80, ${agent.color})`, borderRadius: 2 }} />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Consensus result */}
+                <div style={{
+                  display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 16,
+                  padding: '18px 28px', borderRadius: 12, flexWrap: 'wrap',
+                  background: 'rgba(0,230,118,0.04)', border: '1px solid rgba(0,230,118,0.20)',
+                }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                    <span style={{ width: 10, height: 10, borderRadius: '50%', background: '#00E676', boxShadow: '0 0 8px #00E676', display: 'inline-block' }} />
+                    <span style={{ color: '#00E676', fontWeight: 700, fontSize: 14, fontFamily: '"JetBrains Mono",monospace' }}>2 / 3 EXECUTE — CONSENSUS REACHED</span>
+                  </div>
+                  <span style={{ color: 'rgba(201,168,76,0.3)' }}>·</span>
+                  <span style={{ fontSize: 12, color: '#7B7368', fontFamily: '"JetBrains Mono",monospace' }}>logConsensusVotes() fired on HashKey Chain</span>
+                  <span style={{ color: 'rgba(201,168,76,0.3)' }}>·</span>
+                  <span style={{ fontSize: 12, color: '#E05A3A', fontFamily: '"JetBrains Mono",monospace' }}>⚡ executeWithHSP() ready</span>
+                </div>
+              </div>
+            </section>
+
             {/* ══════ BENTO GRID — Trend 3: Structural Brutalism ══ */}
             <section style={{ padding: '80px 24px', borderTop: '1px solid rgba(201,168,76,0.07)' }}>
               <div style={{ maxWidth: 1200, margin: '0 auto' }}>
@@ -411,14 +513,14 @@ function App() {
 
                   {/* Bottom-center — 4 cols */}
                   <div className="bento-card card-3d" style={{ gridColumn: '6 / 10', padding: '28px', animation: 'rise 0.6s ease-out 0.3s both' }}>
-                    <div style={{ fontSize: 10, color: '#1B7A51', fontFamily: '"JetBrains Mono",monospace', letterSpacing: '0.15em', marginBottom: 10, textTransform: 'uppercase' }}>Core Feature · 03</div>
-                    <h3 style={{ fontSize: 18, fontWeight: 700, color: '#E8E2D8', letterSpacing: '-0.02em', marginBottom: 10, fontFamily: '"Space Grotesk",sans-serif' }}>Autonomous Exec</h3>
+                    <div style={{ fontSize: 10, color: '#E05A3A', fontFamily: '"JetBrains Mono",monospace', letterSpacing: '0.15em', marginBottom: 10, textTransform: 'uppercase' }}>Core Feature · 03</div>
+                    <h3 style={{ fontSize: 18, fontWeight: 700, color: '#E8E2D8', letterSpacing: '-0.02em', marginBottom: 10, fontFamily: '"Space Grotesk",sans-serif' }}>HSP Settlement</h3>
                     <p style={{ fontSize: 13, color: '#7B7368', lineHeight: 1.72 }}>
-                      Confidence ≥ 75% + low risk = agent acts autonomously. No delays, no friction.
+                      Consensus confirmed → <code style={{ color: '#E05A3A', fontSize: 12 }}>executeWithHSP()</code> fires. Capital moves only after cryptographic proof of agent agreement.
                     </p>
                     <div style={{ marginTop: 16, display: 'flex', alignItems: 'center', gap: 8 }}>
-                      <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#1B7A51', boxShadow: '0 0 6px #1B7A51', display: 'inline-block' }} />
-                      <span style={{ fontSize: 11, fontFamily: '"JetBrains Mono",monospace', color: '#1B7A51' }}>AUTO-EXEC ENABLED</span>
+                      <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#E05A3A', boxShadow: '0 0 6px #E05A3A', display: 'inline-block' }} />
+                      <span style={{ fontSize: 11, fontFamily: '"JetBrains Mono",monospace', color: '#E05A3A' }}>HSP · HASHKEY SETTLEMENT PROTOCOL</span>
                     </div>
                   </div>
 
@@ -582,7 +684,12 @@ function App() {
           <div>
             <div style={{ fontSize: 14, fontWeight: 700, color: '#C9A84C', fontFamily: '"Space Grotesk",sans-serif', marginBottom: 5 }}>HashMind</div>
             <div style={{ fontSize: 11, color: '#7B7368', fontFamily: '"JetBrains Mono",monospace', letterSpacing: '0.04em' }}>
-              Built for <span style={{ color: '#6D28D9', fontWeight: 600 }}>Turing Test Hackathon 2026</span> · Consumer &amp; Viral DApps Track
+              Built for{' '}
+              <a href="https://dorahacks.io/hackathon/hskchainjapan" target="_blank" rel="noopener noreferrer"
+                style={{ color: '#0BBDCA', fontWeight: 600, textDecoration: 'none' }}>
+                HashKey Chain Horizon Japan 2026
+              </a>
+              {' '}· AI (HSP) + DeFi Track
             </div>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 18, fontSize: 12, color: '#7B7368', flexWrap: 'wrap' }}>
@@ -591,9 +698,14 @@ function App() {
             <span style={{ color: 'rgba(201,168,76,0.20)' }}>·</span>
             <span style={{ color: '#0BBDCA', fontWeight: 600 }}>Groq AI</span>
             <span style={{ color: 'rgba(201,168,76,0.20)' }}>·</span>
-            <a href="https://github.com/jmadh/hashmind" target="_blank" rel="noopener noreferrer"
+            <a href="https://github.com/JMadhan1/hashmind" target="_blank" rel="noopener noreferrer"
               style={{ color: '#C9A84C', textDecoration: 'none', fontWeight: 600 }}>
-              Open Source ↗
+              GitHub ↗
+            </a>
+            <span style={{ color: 'rgba(201,168,76,0.20)' }}>·</span>
+            <a href="https://hsk.blockscout.com/address/0xCDb15987099FBFC1e61563F39C138dF9635c273B" target="_blank" rel="noopener noreferrer"
+              style={{ color: '#0BBDCA', textDecoration: 'none', fontWeight: 600 }}>
+              Contract ↗
             </a>
           </div>
         </div>

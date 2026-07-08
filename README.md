@@ -179,6 +179,36 @@ HASHKEY_RPC=https://mainnet.hsk.xyz
 
 ---
 
+## ⚡ HSP (HashKey Settlement Protocol) Integration
+
+HashMind is the **first trading system to gate HSP settlement behind multi-agent consensus.**
+
+The flow:
+```
+User connects wallet
+    ↓
+AlphaAgent  votes  EXECUTE / DEFER / REJECT
+YieldAgent  votes  EXECUTE / DEFER / REJECT
+GuardAgent  votes  EXECUTE / DEFER / REJECT
+    ↓
+2-of-3 EXECUTE? → logConsensusVotes() on HashMind.sol
+    ↓
+Consensus confirmed on-chain → executeWithHSP(hspOrderId, amount)
+    ↓
+HSP settlement order created — capital moves only after consensus
+```
+
+**Why this matters for the AI track:** No existing tool proves that AI consensus happened *before* capital moved. HashMind's `executeWithHSP()` function requires an on-chain `ConsensusReached` record — you cannot submit an HSP order without proof that 3 agents agreed.
+
+| Endpoint | Description |
+|---|---|
+| `POST /consensus` | Run 3-agent vote, get consensus result |
+| `POST /log-consensus` | Write all 3 votes to HashMind.sol |
+| `POST /hsp-execute` | Submit consensus signal to HSP settlement |
+| `GET /history` | Global consensus feed |
+
+---
+
 ## 📈 HashKey Chain Ecosystem Integration
 
 | Protocol | Role | APY |
@@ -190,12 +220,33 @@ HASHKEY_RPC=https://mainnet.hsk.xyz
 
 ---
 
+## 🏆 DoraHacks Submission — HashKey Chain Horizon Japan 2026
+
+**Track:** AI (HSP) + DeFi (both)
+
+**One-liner:** *The first trading system where 3 AI agents must reach on-chain consensus before any HSP settlement fires.*
+
+**Problem:** Every existing AI trading tool is a black box. One model makes a call. You can't verify when the decision was made, what the other models thought, or whether the output was cherry-picked.
+
+**Solution:** HashMind creates the first verifiable AI accountability primitive:
+- 3 specialist agents (AlphaAgent, YieldAgent, GuardAgent) vote independently
+- All 3 votes recorded immutably on HashKey Chain *before* the outcome
+- 2-of-3 EXECUTE required — then and only then can HSP settlement be triggered
+- `executeWithHSP()` on-chain enforces this — no consensus record = no settlement
+
+**Live proof:**
+- Contract: [`0xCDb15987099FBFC1e61563F39C138dF9635c273B`](https://hsk.blockscout.com/address/0xCDb15987099FBFC1e61563F39C138dF9635c273B)
+- Explorer: https://hsk.blockscout.com/address/0xCDb15987099FBFC1e61563F39C138dF9635c273B
+- Chain ID: 177 (HashKey Chain Mainnet)
+
+---
+
 <div align="center">
 
 **⛓ HashKey Chain Mainnet · Chain ID 177**
 
 **Built for HashKey Chain Horizon Hackathon · Japan 2026**
 
-*Three agents deliberated. The chain decided. Forever.*
+*Three agents deliberated. The chain decided. HSP settled. Forever.*
 
 </div>

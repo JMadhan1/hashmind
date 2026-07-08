@@ -1,11 +1,11 @@
 {
-  "contract_address": "0x1E594d9fac2173c0B1aaF1Cea78EF5e9Ad84AEEc",
+  "contract_address": "0xCDb15987099FBFC1e61563F39C138dF9635c273B",
   "deployer_address": "0xb2eA43EC4681a21Af81e22fB4531b392D2e24502",
-  "transaction_hash": "f9ae03a7ea20312a24d934928aeb3a9749d3d9d44b8cf39ff30d29fa2241237a",
-  "block_number": 24571661,
+  "transaction_hash": "a16e40944e06c0c3357bca0dde4d3d52a5912be7828ec29e85c53cef20b5a2d3",
+  "block_number": 24573550,
   "chain_id": 177,
   "network": "HashKey Chain Mainnet",
-  "explorer": "https://hsk.blockscout.com/address/0x1E594d9fac2173c0B1aaF1Cea78EF5e9Ad84AEEc",
+  "explorer": "https://hsk.blockscout.com/address/0xCDb15987099FBFC1e61563F39C138dF9635c273B",
   "abi": [
     {
       "inputs": [],
@@ -152,6 +152,49 @@
         }
       ],
       "name": "ConsensusReached",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "user",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "bytes32",
+          "name": "hspOrderId",
+          "type": "bytes32"
+        },
+        {
+          "indexed": false,
+          "internalType": "string",
+          "name": "finalAction",
+          "type": "string"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint8",
+          "name": "aggregatedConfidence",
+          "type": "uint8"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "amountWei",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "timestamp",
+          "type": "uint256"
+        }
+      ],
+      "name": "HSPExecuted",
       "type": "event"
     },
     {
@@ -389,6 +432,24 @@
         }
       ],
       "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "hspOrderId",
+          "type": "bytes32"
+        },
+        {
+          "internalType": "uint256",
+          "name": "amountWei",
+          "type": "uint256"
+        }
+      ],
+      "name": "executeWithHSP",
+      "outputs": [],
+      "stateMutability": "nonpayable",
       "type": "function"
     },
     {

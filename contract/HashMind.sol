@@ -114,6 +114,42 @@ contract HashMind {
         uint256 timestamp
     );
 
+    // ─── HSP (HashKey Settlement Protocol) ───────────────────────────────────
+
+    event HSPExecuted(
+        address indexed user,
+        bytes32 indexed hspOrderId,
+        string  finalAction,
+        uint8   aggregatedConfidence,
+        uint256 amountWei,
+        uint256 timestamp
+    );
+
+    /**
+     * @notice Submit a consensus-backed trade signal to HSP for settlement.
+     *         Requires a prior EXECUTE consensus record for the caller.
+     *         Emits HSPExecuted — the on-chain proof that an AI consensus
+     *         triggered a real capital movement via HashKey Settlement Protocol.
+     *
+     * @param hspOrderId   Unique order ID returned by the HSP merchant API
+     * @param amountWei    Settlement amount in wei (HSK)
+     */
+    function executeWithHSP(bytes32 hspOrderId, uint256 amountWei) external {
+        uint256 len = userConsensus[msg.sender].length;
+        require(len > 0, "HashMind: no consensus record for this wallet");
+        ConsensusRecord memory latest = userConsensus[msg.sender][len - 1];
+        require(latest.consensusReached, "HashMind: latest consensus did not reach EXECUTE");
+
+        emit HSPExecuted(
+            msg.sender,
+            hspOrderId,
+            latest.finalAction,
+            latest.aggregatedConfidence,
+            amountWei,
+            block.timestamp
+        );
+    }
+
     // ─── Constructor ─────────────────────────────────────────────────────────
 
     constructor() {
