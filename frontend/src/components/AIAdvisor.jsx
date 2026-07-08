@@ -44,7 +44,7 @@ function AIAdvisor({ walletAddress }) {
         setMessages(prev => [...prev, { role: 'ai', text: data.answer }])
       } catch {
         if (!isRetry) {
-          setMessages(prev => [...prev, { role: 'ai', text: '⏳ Backend is waking up — retrying in 8s…', error: true }])
+          setMessages(prev => [...prev, { role: 'ai', text: '⏳ Backend cold-starting on Render — auto-retrying in 28s…', error: true }])
           setTimeout(async () => {
             setMessages(prev => {
               const copy = [...prev]
@@ -52,7 +52,7 @@ function AIAdvisor({ walletAddress }) {
               return copy
             })
             await attempt(true)
-          }, 8000)
+          }, 28000)
           return
         }
         setMessages(prev => {

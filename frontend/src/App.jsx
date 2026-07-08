@@ -88,6 +88,9 @@ function App() {
   const [liveStats, setLiveStats] = useState(null)
 
   useEffect(() => {
+    // Pre-warm Render backend immediately on page load
+    axios.get('/api/health', { timeout: 35000 }).catch(() => {})
+
     const fetchStats = () => {
       axios.get('/api/hashkey/stats')
         .then(r => {
