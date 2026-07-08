@@ -245,7 +245,7 @@ Activity Level: {wallet_data.get('activity_level','unknown')}
 
 Cast your YieldAgent vote now."""
 
-        return await self._call_agent("YieldAgent", system, user, fallback_vote="DEFER")
+        return await self._call_agent("YieldAgent", system, user, fallback_vote="DEFER", use_venice=True)
 
     async def _run_guard_agent(
         self,
@@ -296,7 +296,7 @@ Peer Agent Votes:
 
 Cast your GuardAgent risk assessment vote now."""
 
-        return await self._call_agent("GuardAgent", system, user, fallback_vote="DEFER")
+        return await self._call_agent("GuardAgent", system, user, fallback_vote="DEFER", use_venice=True)
 
     # ── Internal helpers ───────────────────────────────────────────────────────
 
@@ -361,7 +361,7 @@ Cast your GuardAgent risk assessment vote now."""
                 vote = fallback_vote
 
             conf = min(100, max(0, int(parsed.get("confidence", 65))))
-            provider = "venice" if (use_venice and self.venice_client) else "groq"
+            provider = "venice-uncensored" if (use_venice and self.venice_client) else "groq-llama3"
 
             return {
                 "agent":      agent_name,
