@@ -131,6 +131,7 @@ Answer in 2-4 sentences. Be specific. Reference actual APYs and protocols. If un
                     ],
                     temperature=0.5,
                     max_tokens=400,
+                    timeout=25,
                 )
                 return r.choices[0].message.content.strip()
             except Exception as e:
@@ -146,6 +147,7 @@ Answer in 2-4 sentences. Be specific. Reference actual APYs and protocols. If un
                 ],
                 temperature=0.5,
                 max_tokens=400,
+                timeout=25,
             )
             return r.choices[0].message.content.strip()
         except Exception as e:
@@ -320,6 +322,7 @@ Cast your GuardAgent risk assessment vote now."""
                         ],
                         temperature=0.4,
                         max_tokens=500,
+                        timeout=25,
                     )
                     content = r.choices[0].message.content.strip()
                 except Exception as ve:
@@ -332,6 +335,7 @@ Cast your GuardAgent risk assessment vote now."""
                         ],
                         temperature=0.4,
                         max_tokens=500,
+                        timeout=25,
                     )
                     content = r.choices[0].message.content.strip()
             else:
@@ -343,6 +347,7 @@ Cast your GuardAgent risk assessment vote now."""
                     ],
                     temperature=0.4,
                     max_tokens=500,
+                    timeout=25,
                 )
                 content = r.choices[0].message.content.strip()
 
