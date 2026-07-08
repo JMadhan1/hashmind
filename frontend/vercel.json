@@ -4,7 +4,7 @@
   "rewrites": [
     {
       "source": "/api/:path*",
-      "destination": "https://hashmind-backend.onrender.com/:path*"
+      "destination": "https://hashmind.onrender.com/:path*"
     },
     {
       "source": "/(.*)",
