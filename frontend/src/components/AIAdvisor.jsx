@@ -35,37 +35,17 @@ function AIAdvisor({ walletAddress }) {
     setInput('')
     setMessages(prev => [...prev, { role: 'user', text: question }])
     setLoading(true)
-    const attempt = async (isRetry) => {
-      try {
-        const { data } = await axios.post('/api/ask', {
-          question,
-          wallet_address: walletAddress || null,
-        }, { timeout: 35000 })
-        setMessages(prev => [...prev, { role: 'ai', text: data.answer }])
-      } catch {
-        if (!isRetry) {
-          setMessages(prev => [...prev, { role: 'ai', text: '⏳ Backend cold-starting on Render — auto-retrying in 28s…', error: true }])
-          setTimeout(async () => {
-            setMessages(prev => {
-              const copy = [...prev]
-              copy[copy.length - 1] = { role: 'ai', text: '↻ Retrying…', error: true }
-              return copy
-            })
-            await attempt(true)
-          }, 28000)
-          return
-        }
-        setMessages(prev => {
-          const copy = [...prev]
-          copy[copy.length - 1] = { role: 'ai', text: 'Backend is still waking up. Please try again in ~30s.', error: true }
-          return copy
-        })
-      } finally {
-        if (isRetry) setLoading(false)
-      }
+    try {
+      const { data } = await axios.post('/api/ask', {
+        question,
+        wallet_address: walletAddress || null,
+      }, { timeout: 90000 })
+      setMessages(prev => [...prev, { role: 'ai', text: data.answer }])
+    } catch {
+      setMessages(prev => [...prev, { role: 'ai', text: 'Connection timed out. Please try again.', error: true }])
+    } finally {
+      setLoading(false)
     }
-    await attempt(false)
-    setLoading(false)
   }
 
   const handleSubmit = (e) => { e.preventDefault(); sendQuestion() }
@@ -119,16 +99,21 @@ function AIAdvisor({ walletAddress }) {
             <div style={{
               padding: '10px 16px', borderRadius: '12px 12px 12px 2px',
               background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)',
-              display: 'flex', gap: 5, alignItems: 'center',
+              display: 'flex', gap: 5, alignItems: 'center', flexDirection: 'column',
             }}>
-              {[0,1,2].map(i => (
-                <span key={i} style={{
-                  width: 5, height: 5, borderRadius: '50%',
-                  background: '#C9A84C', opacity: 0.7,
-                  animation: `pulse-glow 1.2s ease-in-out ${i * 0.2}s infinite`,
-                  display: 'inline-block',
-                }} />
-              ))}
+              <div style={{ display: 'flex', gap: 5, alignItems: 'center' }}>
+                {[0,1,2].map(i => (
+                  <span key={i} style={{
+                    width: 5, height: 5, borderRadius: '50%',
+                    background: '#C9A84C', opacity: 0.7,
+                    animation: `pulse-glow 1.2s ease-in-out ${i * 0.2}s infinite`,
+                    display: 'inline-block',
+                  }} />
+                ))}
+              </div>
+              <span style={{ fontSize: 9, color: '#7B7368', fontFamily: '"JetBrains Mono",monospace', letterSpacing: '0.1em' }}>
+                Venice AI thinking…
+              </span>
             </div>
           </div>
         )}
