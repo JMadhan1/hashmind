@@ -212,7 +212,7 @@ function IdentityPassport({ address, walletData }) {
                 <div style={{ fontSize: 34, fontWeight: 700, color: '#0BBDCA', fontFamily: '"JetBrains Mono",monospace', lineHeight: 1, letterSpacing: '-0.02em' }}>
                   {Number(walletData.balance_hsk).toFixed(1)}
                 </div>
-                <div style={{ fontSize: 9, color: '#7B7368', fontFamily: '"JetBrains Mono",monospace', letterSpacing: '0.16em', textTransform: 'uppercase', marginTop: 4 }}>MNT</div>
+                <div style={{ fontSize: 9, color: '#7B7368', fontFamily: '"JetBrains Mono",monospace', letterSpacing: '0.16em', textTransform: 'uppercase', marginTop: 4 }}>HSK</div>
               </div>
             )}
             {walletData?.total_tx_count !== undefined && (
@@ -564,7 +564,7 @@ function Dashboard({ walletAddress, walletData, recommendations, isAnalyzing, on
           <div style={{ fontSize: 28, fontWeight: 700, color: '#C9A84C', fontFamily: '"JetBrains Mono",monospace', lineHeight: 1, marginBottom: 2 }}>
             <AnimatedNumber value={localWalletData?.balance_hsk || 0} />
           </div>
-          <div style={{ fontSize: 10, color: '#7B7368', fontFamily: '"JetBrains Mono",monospace' }}>MNT</div>
+          <div style={{ fontSize: 10, color: '#7B7368', fontFamily: '"JetBrains Mono",monospace' }}>HSK</div>
         </div>
 
         <div className="bento-card" style={{ padding: '18px 20px' }}>
