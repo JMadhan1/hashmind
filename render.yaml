@@ -14,3 +14,5 @@ services:
         sync: false
       - key: HASHKEY_RPC
         value: https://mainnet.hsk.xyz
+      - key: VENICE_API_KEY
+        sync: false
