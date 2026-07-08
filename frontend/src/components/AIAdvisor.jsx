@@ -35,17 +35,37 @@ function AIAdvisor({ walletAddress }) {
     setInput('')
     setMessages(prev => [...prev, { role: 'user', text: question }])
     setLoading(true)
-    try {
-      const { data } = await axios.post('/api/ask', {
-        question,
-        wallet_address: walletAddress || null,
-      })
-      setMessages(prev => [...prev, { role: 'ai', text: data.answer }])
-    } catch {
-      setMessages(prev => [...prev, { role: 'ai', text: 'Backend is waking up — this can take ~30s on the free tier. Please try again in a moment.', error: true }])
-    } finally {
-      setLoading(false)
+    const attempt = async (isRetry) => {
+      try {
+        const { data } = await axios.post('/api/ask', {
+          question,
+          wallet_address: walletAddress || null,
+        }, { timeout: 35000 })
+        setMessages(prev => [...prev, { role: 'ai', text: data.answer }])
+      } catch {
+        if (!isRetry) {
+          setMessages(prev => [...prev, { role: 'ai', text: '⏳ Backend is waking up — retrying in 8s…', error: true }])
+          setTimeout(async () => {
+            setMessages(prev => {
+              const copy = [...prev]
+              copy[copy.length - 1] = { role: 'ai', text: '↻ Retrying…', error: true }
+              return copy
+            })
+            await attempt(true)
+          }, 8000)
+          return
+        }
+        setMessages(prev => {
+          const copy = [...prev]
+          copy[copy.length - 1] = { role: 'ai', text: 'Backend is still waking up. Please try again in ~30s.', error: true }
+          return copy
+        })
+      } finally {
+        if (isRetry) setLoading(false)
+      }
     }
+    await attempt(false)
+    setLoading(false)
   }
 
   const handleSubmit = (e) => { e.preventDefault(); sendQuestion() }
