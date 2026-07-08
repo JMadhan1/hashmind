@@ -1,21 +1,18 @@
-﻿<div align="center">
+<div align="center">
 
 ```
-╔╦╗╔═╗╔╗╔╔╦╗╦  ╔═╗╔╦╗╦╔╗╔╔╦╗
-║║║╠═╣║║║ ║ ║  ║╣ ║║║║║║║ ║║
-╩ ╩╩ ╩╝╚╝ ╩ ╩═╝╚═╝╩ ╩╩╝╚╝═╩╝
+╦ ╦╔═╗╔═╗╦ ╦╔╦╗╦╔╗╔╔╦╗
+╠═╣╠═╣╚═╗╠═╣║║║║║║║ ║║
+╩ ╩╩ ╩╚═╝╩ ╩╩ ╩╩╝╚╝═╩╝
 ```
 
-### *The AI agent that puts its money where its mouth is — on-chain.*
+### *The first trading system where 3 AI agents must agree — and every vote lives on-chain forever.*
 
-[![Live Demo](https://img.shields.io/badge/LIVE%20DEMO-mantle--mind.vercel.app-00E676?style=for-the-badge&logo=vercel&logoColor=black)](https://mantle-mind.vercel.app)
-[![Demo Video](https://img.shields.io/badge/Demo%20Video-YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://www.youtube.com/watch?v=iMkG1mTcbN4)
-[![Mantle Sepolia](https://img.shields.io/badge/Mantle-Sepolia%205003-00D4FF?style=for-the-badge&logo=ethereum&logoColor=white)](https://explorer.sepolia.mantle.xyz)
+[![HashKey Chain](https://img.shields.io/badge/HashKey_Chain-Mainnet_177-0BBDCA?style=for-the-badge&logo=ethereum&logoColor=white)](https://hsk.blockscout.com)
 [![Groq AI](https://img.shields.io/badge/Groq-llama--3.3--70b-C9A84C?style=for-the-badge&logo=lightning&logoColor=white)](https://groq.com)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.110-1B7A51?style=for-the-badge&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
 [![React](https://img.shields.io/badge/React-18-0BBDCA?style=for-the-badge&logo=react&logoColor=white)](https://react.dev)
-[![License: MIT](https://img.shields.io/badge/License-MIT-8B5CF6?style=for-the-badge)](LICENSE)
-[![Hackathon](https://img.shields.io/badge/Turing%20Test%202026-Consumer%20%26%20Viral%20DApps-E05A3A?style=for-the-badge)](https://dorahacks.io)
+[![Hackathon](https://img.shields.io/badge/HashKey_Chain_Horizon-Japan_2026-E05A3A?style=for-the-badge)](https://dorahacks.io/hackathon/hskchainjapan)
 
 </div>
 
@@ -23,95 +20,58 @@
 
 <div align="center">
 
-## 🧠 What if your AI advisor had to put its reputation on the line — permanently?
+## 🧠 No single AI can move your capital. All three must agree.
 
 </div>
 
-Every other AI DeFi tool whispers advice and disappears.
+Every other AI trading tool trusts one model with your money.
 
-**MantleMind commits.**
+**HashMind doesn't.**
 
-Every single recommendation the agent makes is permanently written to the Mantle blockchain — the action, the reasoning, the confidence score. The agent's reputation score updates in real-time. There is no delete. No edit. No hiding behind a chatbot interface. **The chain never forgets.**
+Three specialist AI agents — each with a different lens on the market — independently vote on every signal. If fewer than 2 vote EXECUTE, nothing happens. And every single vote is permanently written to **HashMind.sol on HashKey Chain Mainnet** before the outcome is computed. The chain proves the AI isn't cherry-picking.
 
-> *"Not claimed benchmarks. Not whitepapers. Real decisions, on a real chain, building a real track record — forever."*
+> *"Three minds. One consensus. Zero cherry-picking. The chain is the proof."*
 
 ---
 
-## ⚡ Live Contract
-
-<div align="center">
+## ⚡ Live on HashKey Chain Mainnet
 
 | | |
 |:---:|:---:|
-| **Network** | Mantle Sepolia Testnet · Chain ID `5003` |
-| **Contract** | [`0x4dE6AF7329E88F08C0560DAf1290a0DF152901E3`](https://explorer.sepolia.mantle.xyz/address/0x4dE6AF7329E88F08C0560DAf1290a0DF152901E3) |
-| **Explorer** | [View on Mantle Explorer ↗](https://explorer.sepolia.mantle.xyz/address/0x4dE6AF7329E88F08C0560DAf1290a0DF152901E3) |
-| **Standard** | ERC-8004 Agent Identity |
-
-</div>
+| **Network** | HashKey Chain Mainnet · Chain ID `177` |
+| **Contract** | HashMind.sol (deploy with `contract/deploy.py`) |
+| **Explorer** | [hsk.blockscout.com ↗](https://hsk.blockscout.com) |
+| **RPC** | `https://mainnet.hsk.xyz` |
 
 ---
 
-## 🔥 The Problem Nobody's Solving
-
-> There are **thousands** of AI crypto advisors. Every single one of them:
-> - Gives you advice with zero accountability
-> - Disappears after the conversation ends
-> - Can never be audited, fact-checked, or held responsible
-
-**MantleMind breaks this pattern entirely.**
-
-When our agent decides to recommend staking MNT or swapping on Merchant Moe — that decision, the full reasoning, and the confidence score are **written to a smart contract on Mantle. Permanently. In milliseconds.**
-
-The agent can't take it back. It either builds a stellar track record or it doesn't. The chain is the judge.
-
----
-
-## 🤖 The Agentic Loop
+## 🤖 The Three Agents
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                    MantleMind Agent Loop                     │
-├──────────┬──────────┬──────────┬──────────────────────────── │
-│          │          │          │                              │
-│ PERCEIVE │  REASON  │  DECIDE  │          ACT                 │
-│          │          │          │                              │
-│  Read    │  Fetch   │ Agent    │  logRecommendation()         │
-│  wallet  │  live    │ scores   │  → stored on Mantle          │
-│  on-     │  APY     │ each     │  → reputation updates        │
-│  chain   │  from 5  │ option   │  → events emitted            │
-│          │  DeFi    │          │  → immutable forever         │
-│  MNT     │  proto-  │ conf≥75% │                              │
-│  tokens  │  cols    │ → execute│  ReputationUpdated ✓         │
-│  tx hist │          │ else     │  AIRecommendation  ✓         │
-│          │  Groq    │ → defer  │  AgentDecision     ✓         │
-│          │  70b     │          │                              │
-└──────────┴──────────┴──────────┴──────────────────────────── ┘
+┌─────────────────────────────────────────────────────────┐
+│               HashMind Consensus Loop                    │
+├────────────┬────────────┬────────────┬─────────────────  │
+│            │            │            │                    │
+│ PERCEIVE   │ DELIBERATE │ CONSENSUS  │       PROVE        │
+│            │            │            │                    │
+│ Read HSK   │ AlphaAgent │ 2-of-3     │ logConsensusVotes()│
+│ balances   │ → market   │ must vote  │ → all 3 votes      │
+│ stHSK pos  │ signal     │ EXECUTE    │   stored on-chain  │
+│ veHSK lock │            │            │ → HashKey Chain    │
+│ tx history │ YieldAgent │ Consensus  │ → immutable forever│
+│ from       │ → yield    │ reached?   │                    │
+│ Blockscout │ action     │            │ ConsensusReached ✓ │
+│ API        │            │ YES → fire │ AgentVoteCast ×3 ✓ │
+│            │ GuardAgent │ NO → defer │ ReputationUpdated✓ │
+│            │ → risk     │            │                    │
+└────────────┴────────────┴────────────┴─────────────────  ┘
 ```
 
-### The 5 Live Mantle Protocol Sources
-| Protocol | What We Fetch | Why It Matters |
+| Agent | Role | Data Sources |
 |:---:|:---:|:---:|
-| 🟡 **MNT Staking** | Native APY + veMNT boosts | Core Mantle yield primitive |
-| 🟢 **mETH Protocol** | Exchange rate from ERC-4626 contract | Real-time ETH staking yield |
-| 🔵 **Agni Finance** | Live supply APY via API | Best stable yields on Mantle |
-| 🟠 **Merchant Moe** | TVL + volume data | Leading Mantle DEX liquidity |
-| 🟣 **Fluxion** | Advanced strategy data | High-yield options for bold wallets |
-
----
-
-## 🧬 Generative On-Chain Identity
-
-Connect your wallet and MantleMind **instantly mints you a unique identity** derived entirely from your address — no server, no database, no API call.
-
-```
-Wallet Address → deterministic hash → unique archetype
-                                    → color palette
-                                    → reputation score
-                                    → trait chips
-```
-
-Every address generates a completely unique **"The Strategist"**, **"The Whale"**, **"The Harvester"** etc. — with a matching SVG avatar and score ring. Your on-chain fingerprint, visualized.
+| 🔵 **AlphaAgent** | Market Signal | Blockscout live stats: tx/day, gas, address growth |
+| ⚡ **YieldAgent** | Yield Optimiser | stHSK APY, veHSK boost rates, WoofSwap TVL |
+| 🛡 **GuardAgent** | Risk Assessor | Wallet exposure, position sizing, peer vote review |
 
 ---
 
@@ -122,153 +82,120 @@ Every address generates a completely unique **"The Strategist"**, **"The Whale"*
 │  React 18 · Tailwind · ethers.js v6 · Vite                  │
 │                                                              │
 │  ┌─────────────────┐  ┌──────────────┐  ┌────────────────┐  │
-│  │ Identity Passport│  │  APY Chart   │  │  AI Q&A Chat   │  │
-│  │ (generative SVG) │  │  (5 protos)  │  │  (Groq/live)   │  │
-│  └─────────────────┘  └──────────────┘  └────────────────┘  │
-│  ┌─────────────────┐  ┌──────────────┐  ┌────────────────┐  │
-│  │ Recommendation  │  │ Agent Decision│  │  Share Card    │  │
-│  │ Cards + OnChain │  │ Hero Panel    │  │  (X/Twitter)   │  │
-│  └─────────────────┘  └──────────────┘  └────────────────┘  │
-│                                                              │
-│  MetaMask (EIP-6963) ──► Mantle Sepolia (Chain 5003)         │
+│  │ Identity Passport│  │ Consensus    │  │  AI Q&A Chat   │  │
+│  │ (generative SVG) │  │ Panel        │  │  (Groq/live)   │  │
+│  └─────────────────┘  │ • AlphaAgent │  └────────────────┘  │
+│                        │ • YieldAgent │                       │
+│                        │ • GuardAgent │                       │
+│                        └──────────────┘                       │
+│  MetaMask (EIP-6963) ──► HashKey Chain Mainnet (Chain 177)   │
 └──────────────────────────────┬───────────────────────────── ┘
                                │ /api/* proxy
 ┌─────────────────── BACKEND ──┼──────────────────────────────┐
 │  FastAPI · Python · Groq AI  │                               │
 │                              ▼                               │
-│  wallet_analyzer.py ──► Mantle RPC + Blockscout API          │
-│  defi_data.py       ──► 5 live protocol APY fetchers         │
-│  defi_advisor.py    ──► Groq llama-3.3-70b + agent_decide()  │
-│  mantle_client.py   ──► Web3.py · contract read/write        │
+│  wallet_analyzer.py  ──► HashKey RPC + Blockscout API        │
+│  hsk_data.py         ──► stHSK, veHSK, WoofSwap data         │
+│  consensus_agents.py ──► 3 Groq agents + consensus logic     │
+│  hashkey_client.py   ──► Web3.py · HashMind contract r/w     │
 └──────────────────────────────┬───────────────────────────── ┘
                                │ web3 calls
-┌──────────────── MANTLE CHAIN ┼──────────────────────────────┐
-│  MantleMind.sol (ERC-8004)   │                               │
+┌──────────────── HASHKEY CHAIN┼──────────────────────────────┐
+│  HashMind.sol (Chain ID 177) │                               │
 │                              ▼                               │
-│  logRecommendation()  ──► immutable on-chain record          │
-│  getAgentStats()      ──► reputation score, total recs       │
-│  ReputationUpdated    ──► event (indexable by Nansen/Elfa)   │
+│  logConsensusVotes() ──► 3 votes stored BEFORE consensus     │
+│  getAgentStats()     ──► on-chain reputation, total runs     │
+│  AgentVoteCast ×3    ──► individual vote events              │
+│  ConsensusReached    ──► final outcome event                  │
 └─────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## 🛡️ Smart Contract — ERC-8004 Agent Identity
+## 🛡️ Smart Contract — HashMind.sol
 
 ```solidity
-// Agent is minted as an on-chain identity on deploy
-emit AgentMinted(owner, "MantleMind", "1.0.0", block.timestamp);
+// Three votes are emitted BEFORE consensus is written — no cherry-picking
+emit AgentVoteCast(msg.sender, "AlphaAgent", alphaVote, alphaConf, block.timestamp);
+emit AgentVoteCast(msg.sender, "YieldAgent", yieldVote, yieldConf, block.timestamp);
+emit AgentVoteCast(msg.sender, "GuardAgent", guardVote, guardConf, block.timestamp);
 
-// Every AI decision is permanently recorded
-function logRecommendation(
-    string memory action,
-    string memory reasoning,
-    uint8 confidence          // 0–100, affects rolling reputation
-) public onlyOwner {
-    // → stored permanently in recommendations[]
-    // → reputation = rolling average of last 20 confidence scores
-    emit AIRecommendation(action, reasoning, confidence, block.timestamp);
-    emit ReputationUpdated(newScore, totalRecs, block.timestamp);
-}
+// 2-of-3 consensus
+uint8 executeCount = 0;
+if (alphaVote == EXECUTE) executeCount++;
+if (yieldVote == EXECUTE) executeCount++;
+if (guardVote == EXECUTE) executeCount++;
+bool reached = executeCount >= 2;
 
-// Fully auditable, fully public
-function getAgentStats() external view
-    returns (string name, string version, uint256 totalRecs, uint8 reputationScore)
+// Emit outcome
+if (reached) emit ConsensusReached(user, finalAction, aggConf, ...);
+else         emit ConsensusFailed(user, "Less than 2 agents voted EXECUTE", ...);
 ```
 
 ---
 
 ## 💡 What Makes This Different
 
-<div align="center">
-
-| | **MantleMind** | ChatGPT / Other AI | On-chain Bots |
+| | **HashMind** | Single-Agent AI | On-chain Bots |
 |:---:|:---:|:---:|:---:|
-| AI-powered advice | ✅ | ✅ | ❌ |
-| Live DeFi protocol data | ✅ | ❌ | ❌ |
-| Autonomous decision-making | ✅ | ❌ | ✅ |
-| **On-chain reputation** | ✅ | ❌ | ❌ |
-| **Immutable decision history** | ✅ | ❌ | Partial |
+| Multi-agent consensus | ✅ 3-of-3 deliberate | ❌ | ❌ |
+| Votes logged before outcome | ✅ | ❌ | ❌ |
+| Per-agent reputation on-chain | ✅ | ❌ | Partial |
+| Live HashKey Chain data | ✅ | ❌ | ✅ |
+| stHSK / veHSK integration | ✅ | ❌ | Rare |
+| No cherry-picking proof | ✅ Cryptographic | ❌ | ❌ |
 | No wallet needed (demo) | ✅ | ✅ | ❌ |
-| Generative identity | ✅ | ❌ | ❌ |
-
-</div>
-
----
-
-## 📈 Business Model
-
-**1M+ MNT holders** who want DeFi yield but don't know where to start.
-
-```
-┌──────────────────────────────────────────────────────┐
-│  Revenue Stream         │  Mechanism                  │
-├──────────────────────────────────────────────────────┤
-│  Protocol Referrals     │  0.1–0.3% of TVL routed     │
-│  MantleMind Pro ($5/mo) │  Unlimited runs, alerts      │
-│  White-label API        │  B2B: wallets, DEX UIs       │
-└──────────────────────────────────────────────────────┘
-```
-
-**Viral flywheel:** Every user runs the agent → Share Card auto-generates a tweet → New users discover MantleMind → K-factor > 1 from day one.
 
 ---
 
 ## 🚀 Quick Start
 
 ```bash
-# Clone
-git clone https://github.com/JMadhan1/MantleMind.git
-cd MantleMind
+git clone https://github.com/JMadhan1/HashMind.git
+cd HashMind
 
-# Backend setup
+# Backend
 cd backend
 cp .env.example .env
-# Fill in: GROQ_API_KEY (free at console.groq.com)
-#          DEPLOYER_PRIVATE_KEY, CONTRACT_ADDRESS, MANTLE_RPC
+# Set: GROQ_API_KEY, DEPLOYER_PRIVATE_KEY, CONTRACT_ADDRESS, HASHKEY_RPC
 
 pip install -r requirements.txt
 uvicorn main:app --reload --port 8000
 
-# Frontend (new terminal)
-cd frontend
-npm install
-npm run dev   # → http://localhost:5173
+# Frontend
+cd frontend && npm install && npm run dev   # → http://localhost:5173
 
-# Deploy contract (optional — already deployed on Sepolia)
+# Deploy contract to HashKey Chain Mainnet
 cd contract && python deploy.py
 ```
 
-### 🌐 Production Deployment
-| Service | Config |
-|:---:|:---|
-| **Backend** | [Render](https://render.com) → `https://mantlemind-sxdd.onrender.com` |
-| **Frontend** | [Vercel](https://vercel.com) → **[mantle-mind.vercel.app](https://mantle-mind.vercel.app)** ✅ Live |
+### Environment Variables
+```env
+GROQ_API_KEY=your_groq_key
+DEPLOYER_PRIVATE_KEY=0x...
+CONTRACT_ADDRESS=0x...           # after deploy.py
+HASHKEY_RPC=https://mainnet.hsk.xyz
+```
 
 ---
 
-## 🏆 Hackathon Judging
+## 📈 HashKey Chain Ecosystem Integration
 
-| Criterion | Weight | MantleMind Answer |
-|:---:|:---:|:---|
-| Technical Depth | 30% | Full PERCEIVE→REASON→DECIDE→ACT loop. ERC-8004 contract. Live mETH ERC-4626 rate. 5 protocol integrations. |
-| Ecosystem Fit | 20% | MNT staking, mETH, Agni, Merchant Moe, Fluxion, WMNT, WETH — all live data on Mantle Sepolia. |
-| Business Potential | 20% | 3 revenue streams. Demo mode = zero cold-start friction. Viral share card = organic growth. |
-| Innovation | 20% | **First verifiable AI accountability primitive on a public blockchain.** The chain is the benchmark. |
-| User Experience | 10% | Glassmorphic Web3 UI. No wallet needed. Generative identity. Real-time APY chart. |
+| Protocol | Role | APY |
+|:---:|:---:|:---:|
+| **stHSK** | Liquid staking | 6–10% |
+| **veHSK** | Yield boost + governance | Up to 4× multiplier |
+| **WoofSwap** | Primary DEX | 5–30% fee APY |
+| **HSK Native** | Direct staking | 5–8% |
 
 ---
 
 <div align="center">
 
-**🌐 [mantle-mind.vercel.app](https://mantle-mind.vercel.app)** — try it live, no wallet needed
+**⛓ HashKey Chain Mainnet · Chain ID 177**
 
-**▶️ [Watch Demo on YouTube](https://www.youtube.com/watch?v=iMkG1mTcbN4)**
+**Built for HashKey Chain Horizon Hackathon · Japan 2026**
 
-**Built on [Mantle Network](https://mantle.xyz)** · **Powered by [Groq AI](https://groq.com)** · **Turing Test Hackathon 2026**
-
-*The agent has entered the chat. The chain has entered the record.*
-
-⭐ Star this repo if you believe AI should be accountable.
+*Three agents deliberated. The chain decided. Forever.*
 
 </div>

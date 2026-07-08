@@ -2,16 +2,16 @@ import { useState, useRef, useEffect } from 'react'
 import axios from 'axios'
 
 const QUICK_QUESTIONS = [
-  { label: 'Am I losing to IL?',       q: 'How does impermanent loss work in Merchant Moe LPs and when should I be worried?' },
-  { label: 'Liquidation risk?',         q: 'What health factor should I maintain on Agni Finance to avoid liquidation?' },
-  { label: 'mETH vs MNT staking?',     q: 'Which is better right now — staking MNT natively or using mETH liquid staking?' },
-  { label: 'veMNT worth it?',           q: 'Is locking MNT for veMNT worth it? What boosts and governance power do I get?' },
-  { label: 'Best yields now?',          q: 'What are the best yield opportunities on Mantle right now with the lowest risk?' },
-  { label: 'When to rebalance?',        q: 'My MNT has pumped a lot. Should I take profits or add more to a liquidity pool?' },
-  { label: 'Bridge to Mantle?',         q: 'What is the cheapest and fastest way to bridge assets to Mantle?' },
-  { label: 'New to Mantle DeFi?',       q: 'I just got 100 MNT. What should I do first to start earning safely?' },
-  { label: 'Gas cheapest when?',        q: 'When is gas cheapest on Mantle and how do I optimize my transaction costs?' },
-  { label: 'Track DeFi taxes?',         q: 'How do I track my DeFi activity on Mantle for tax purposes?' },
+  { label: 'Am I losing to IL?',       q: 'How does impermanent loss work in veHSK LPs and when should I be worried?' },
+  { label: 'Liquidation risk?',         q: 'What health factor should I maintain on WoofSwap to avoid liquidation?' },
+  { label: 'stHSK vs native staking?',  q: 'Which is better right now — staking HSK natively or using stHSK liquid staking?' },
+  { label: 'veHSK worth it?',           q: 'Is locking HSK for veHSK worth it? What boosts and governance power do I get?' },
+  { label: 'Best yields now?',          q: 'What are the best yield opportunities on HashKey Chain right now with the lowest risk?' },
+  { label: 'When to rebalance?',        q: 'My HSK has pumped a lot. Should I take profits or add more to a WoofSwap liquidity pool?' },
+  { label: 'Bridge to HashKey Chain?',         q: 'What is the cheapest and fastest way to bridge assets to HashKey Chain?' },
+  { label: 'New to HashKey Chain DeFi?',       q: 'I just got 100 HSK. What should I do first to start earning safely on HashKey Chain?' },
+  { label: 'Gas cheapest when?',        q: 'When is gas cheapest on HashKey Chain and how do I optimize my transaction costs?' },
+  { label: 'Track DeFi taxes?',         q: 'How do I track my DeFi activity on HashKey Chain for tax purposes?' },
 ]
 
 function AIAdvisor({ walletAddress }) {
@@ -19,7 +19,7 @@ function AIAdvisor({ walletAddress }) {
   const [messages, setMessages] = useState([
     {
       role: 'ai',
-      text: "Hey! I'm your MantleMind AI advisor. Ask me anything about Mantle DeFi — impermanent loss, liquidation risk, yield comparison, veMNT, bridging, or just what to do with your MNT. Try a quick question below ↓",
+      text: "Hey! I'm your HashMind AI advisor. Ask me anything about HashKey Chain DeFi — impermanent loss, liquidation risk, yield comparison, veHSK, stHSK, WoofSwap, or just what to do with your HSK. Try a quick question below ↓",
     }
   ])
   const [loading, setLoading] = useState(false)
@@ -64,7 +64,7 @@ function AIAdvisor({ walletAddress }) {
           boxShadow: '0 0 6px #1B7A51', flexShrink: 0,
         }} />
         <span style={{ fontSize: 9, color: '#7B7368', fontFamily: '"JetBrains Mono",monospace', letterSpacing: '0.20em', textTransform: 'uppercase' }}>
-          AI Advisor · Mantle DeFi Expert
+          AI Advisor · HashKey Chain DeFi Expert
         </span>
         {walletAddress && (
           <span style={{ marginLeft: 'auto', fontSize: 9, color: '#1B7A51', fontFamily: '"JetBrains Mono",monospace', letterSpacing: '0.1em' }}>
@@ -152,7 +152,7 @@ function AIAdvisor({ walletAddress }) {
         <input
           value={input}
           onChange={e => setInput(e.target.value)}
-          placeholder="Ask anything about Mantle DeFi…"
+          placeholder="Ask anything about HashKey Chain DeFi…"
           disabled={loading}
           style={{
             flex: 1, background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)',

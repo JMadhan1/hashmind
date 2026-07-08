@@ -1,77 +1,16 @@
 {
-  "contract_address": "0x4dE6AF7329E88F08C0560DAf1290a0DF152901E3",
+  "contract_address": "0x1E594d9fac2173c0B1aaF1Cea78EF5e9Ad84AEEc",
   "deployer_address": "0xb2eA43EC4681a21Af81e22fB4531b392D2e24502",
-  "transaction_hash": "85bf977430e574bdba86d8d799cb982b1151e6fb64e09da93392386d176a1815",
-  "block_number": 39723505,
-  "chain_id": 5003,
-  "network": "Mantle Testnet",
+  "transaction_hash": "f9ae03a7ea20312a24d934928aeb3a9749d3d9d44b8cf39ff30d29fa2241237a",
+  "block_number": 24571661,
+  "chain_id": 177,
+  "network": "HashKey Chain Mainnet",
+  "explorer": "https://hsk.blockscout.com/address/0x1E594d9fac2173c0B1aaF1Cea78EF5e9Ad84AEEc",
   "abi": [
     {
       "inputs": [],
       "stateMutability": "nonpayable",
       "type": "constructor"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": true,
-          "internalType": "address",
-          "name": "user",
-          "type": "address"
-        },
-        {
-          "indexed": false,
-          "internalType": "string",
-          "name": "action",
-          "type": "string"
-        },
-        {
-          "indexed": false,
-          "internalType": "string",
-          "name": "reasoning",
-          "type": "string"
-        },
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "confidence",
-          "type": "uint256"
-        },
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "timestamp",
-          "type": "uint256"
-        }
-      ],
-      "name": "AIRecommendation",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": true,
-          "internalType": "address",
-          "name": "user",
-          "type": "address"
-        },
-        {
-          "indexed": false,
-          "internalType": "string",
-          "name": "decisionType",
-          "type": "string"
-        },
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "timestamp",
-          "type": "uint256"
-        }
-      ],
-      "name": "AgentDecision",
-      "type": "event"
     },
     {
       "anonymous": false,
@@ -108,6 +47,117 @@
       "anonymous": false,
       "inputs": [
         {
+          "indexed": true,
+          "internalType": "address",
+          "name": "user",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "string",
+          "name": "agentName",
+          "type": "string"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint8",
+          "name": "voteValue",
+          "type": "uint8"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint8",
+          "name": "confidence",
+          "type": "uint8"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "timestamp",
+          "type": "uint256"
+        }
+      ],
+      "name": "AgentVoteCast",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "user",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "string",
+          "name": "reason",
+          "type": "string"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "timestamp",
+          "type": "uint256"
+        }
+      ],
+      "name": "ConsensusFailed",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "user",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "string",
+          "name": "finalAction",
+          "type": "string"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint8",
+          "name": "aggregatedConfidence",
+          "type": "uint8"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "alphaVote",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "yieldVote",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "guardVote",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "timestamp",
+          "type": "uint256"
+        }
+      ],
+      "name": "ConsensusReached",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
           "indexed": false,
           "internalType": "uint256",
           "name": "newScore",
@@ -116,7 +166,7 @@
         {
           "indexed": false,
           "internalType": "uint256",
-          "name": "totalRecommendations",
+          "name": "totalConsensus",
           "type": "uint256"
         },
         {
@@ -155,7 +205,46 @@
         },
         {
           "internalType": "uint256",
-          "name": "totalRecommendations",
+          "name": "totalConsensus",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "reputationScore",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        }
+      ],
+      "name": "agentStats",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "totalVotes",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "executeVotes",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "deferVotes",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "rejectVotes",
           "type": "uint256"
         },
         {
@@ -175,7 +264,7 @@
           "type": "uint256"
         }
       ],
-      "name": "allRecommendations",
+      "name": "allConsensus",
       "outputs": [
         {
           "internalType": "address",
@@ -183,19 +272,115 @@
           "type": "address"
         },
         {
-          "internalType": "string",
-          "name": "action",
-          "type": "string"
+          "components": [
+            {
+              "internalType": "string",
+              "name": "agentName",
+              "type": "string"
+            },
+            {
+              "internalType": "enum HashMind.Vote",
+              "name": "vote",
+              "type": "uint8"
+            },
+            {
+              "internalType": "uint8",
+              "name": "confidence",
+              "type": "uint8"
+            },
+            {
+              "internalType": "string",
+              "name": "signal",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "reasoning",
+              "type": "string"
+            }
+          ],
+          "internalType": "struct HashMind.AgentVote",
+          "name": "alpha",
+          "type": "tuple"
+        },
+        {
+          "components": [
+            {
+              "internalType": "string",
+              "name": "agentName",
+              "type": "string"
+            },
+            {
+              "internalType": "enum HashMind.Vote",
+              "name": "vote",
+              "type": "uint8"
+            },
+            {
+              "internalType": "uint8",
+              "name": "confidence",
+              "type": "uint8"
+            },
+            {
+              "internalType": "string",
+              "name": "signal",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "reasoning",
+              "type": "string"
+            }
+          ],
+          "internalType": "struct HashMind.AgentVote",
+          "name": "yield_",
+          "type": "tuple"
+        },
+        {
+          "components": [
+            {
+              "internalType": "string",
+              "name": "agentName",
+              "type": "string"
+            },
+            {
+              "internalType": "enum HashMind.Vote",
+              "name": "vote",
+              "type": "uint8"
+            },
+            {
+              "internalType": "uint8",
+              "name": "confidence",
+              "type": "uint8"
+            },
+            {
+              "internalType": "string",
+              "name": "signal",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "reasoning",
+              "type": "string"
+            }
+          ],
+          "internalType": "struct HashMind.AgentVote",
+          "name": "guard",
+          "type": "tuple"
+        },
+        {
+          "internalType": "bool",
+          "name": "consensusReached",
+          "type": "bool"
         },
         {
           "internalType": "string",
-          "name": "reasoning",
+          "name": "finalAction",
           "type": "string"
         },
         {
-          "internalType": "uint256",
-          "name": "confidence",
-          "type": "uint256"
+          "internalType": "uint8",
+          "name": "aggregatedConfidence",
+          "type": "uint8"
         },
         {
           "internalType": "uint256",
@@ -227,7 +412,7 @@
         },
         {
           "internalType": "uint256",
-          "name": "totalRecommendations",
+          "name": "totalConsensus",
           "type": "uint256"
         },
         {
@@ -245,8 +430,47 @@
       "type": "function"
     },
     {
+      "inputs": [
+        {
+          "internalType": "string",
+          "name": "agentKey",
+          "type": "string"
+        }
+      ],
+      "name": "getPerAgentStats",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "totalVotes",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "executeVotes",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "deferVotes",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "rejectVotes",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "reputationScore",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
       "inputs": [],
-      "name": "getTotalRecommendations",
+      "name": "getTotalConsensus",
       "outputs": [
         {
           "internalType": "uint256",
@@ -265,39 +489,12 @@
           "type": "address"
         }
       ],
-      "name": "getUserRecommendations",
+      "name": "getUserConsensusCount",
       "outputs": [
         {
-          "components": [
-            {
-              "internalType": "address",
-              "name": "user",
-              "type": "address"
-            },
-            {
-              "internalType": "string",
-              "name": "action",
-              "type": "string"
-            },
-            {
-              "internalType": "string",
-              "name": "reasoning",
-              "type": "string"
-            },
-            {
-              "internalType": "uint256",
-              "name": "confidence",
-              "type": "uint256"
-            },
-            {
-              "internalType": "uint256",
-              "name": "timestamp",
-              "type": "uint256"
-            }
-          ],
-          "internalType": "struct MantleMind.Recommendation[]",
+          "internalType": "uint256",
           "name": "",
-          "type": "tuple[]"
+          "type": "uint256"
         }
       ],
       "stateMutability": "view",
@@ -306,22 +503,72 @@
     {
       "inputs": [
         {
+          "internalType": "uint8",
+          "name": "alphaVote",
+          "type": "uint8"
+        },
+        {
           "internalType": "string",
-          "name": "action",
+          "name": "alphaSignal",
           "type": "string"
         },
         {
           "internalType": "string",
-          "name": "reasoning",
+          "name": "alphaReason",
           "type": "string"
         },
         {
-          "internalType": "uint256",
-          "name": "confidence",
-          "type": "uint256"
+          "internalType": "uint8",
+          "name": "alphaConf",
+          "type": "uint8"
+        },
+        {
+          "internalType": "uint8",
+          "name": "yieldVote",
+          "type": "uint8"
+        },
+        {
+          "internalType": "string",
+          "name": "yieldSignal",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "yieldReason",
+          "type": "string"
+        },
+        {
+          "internalType": "uint8",
+          "name": "yieldConf",
+          "type": "uint8"
+        },
+        {
+          "internalType": "uint8",
+          "name": "guardVote",
+          "type": "uint8"
+        },
+        {
+          "internalType": "string",
+          "name": "guardSignal",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "guardReason",
+          "type": "string"
+        },
+        {
+          "internalType": "uint8",
+          "name": "guardConf",
+          "type": "uint8"
+        },
+        {
+          "internalType": "string",
+          "name": "finalAction",
+          "type": "string"
         }
       ],
-      "name": "logRecommendation",
+      "name": "logConsensusVotes",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
@@ -339,7 +586,7 @@
           "type": "uint256"
         }
       ],
-      "name": "userRecommendations",
+      "name": "userConsensus",
       "outputs": [
         {
           "internalType": "address",
@@ -347,19 +594,115 @@
           "type": "address"
         },
         {
-          "internalType": "string",
-          "name": "action",
-          "type": "string"
+          "components": [
+            {
+              "internalType": "string",
+              "name": "agentName",
+              "type": "string"
+            },
+            {
+              "internalType": "enum HashMind.Vote",
+              "name": "vote",
+              "type": "uint8"
+            },
+            {
+              "internalType": "uint8",
+              "name": "confidence",
+              "type": "uint8"
+            },
+            {
+              "internalType": "string",
+              "name": "signal",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "reasoning",
+              "type": "string"
+            }
+          ],
+          "internalType": "struct HashMind.AgentVote",
+          "name": "alpha",
+          "type": "tuple"
+        },
+        {
+          "components": [
+            {
+              "internalType": "string",
+              "name": "agentName",
+              "type": "string"
+            },
+            {
+              "internalType": "enum HashMind.Vote",
+              "name": "vote",
+              "type": "uint8"
+            },
+            {
+              "internalType": "uint8",
+              "name": "confidence",
+              "type": "uint8"
+            },
+            {
+              "internalType": "string",
+              "name": "signal",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "reasoning",
+              "type": "string"
+            }
+          ],
+          "internalType": "struct HashMind.AgentVote",
+          "name": "yield_",
+          "type": "tuple"
+        },
+        {
+          "components": [
+            {
+              "internalType": "string",
+              "name": "agentName",
+              "type": "string"
+            },
+            {
+              "internalType": "enum HashMind.Vote",
+              "name": "vote",
+              "type": "uint8"
+            },
+            {
+              "internalType": "uint8",
+              "name": "confidence",
+              "type": "uint8"
+            },
+            {
+              "internalType": "string",
+              "name": "signal",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "reasoning",
+              "type": "string"
+            }
+          ],
+          "internalType": "struct HashMind.AgentVote",
+          "name": "guard",
+          "type": "tuple"
+        },
+        {
+          "internalType": "bool",
+          "name": "consensusReached",
+          "type": "bool"
         },
         {
           "internalType": "string",
-          "name": "reasoning",
+          "name": "finalAction",
           "type": "string"
         },
         {
-          "internalType": "uint256",
-          "name": "confidence",
-          "type": "uint256"
+          "internalType": "uint8",
+          "name": "aggregatedConfidence",
+          "type": "uint8"
         },
         {
           "internalType": "uint256",

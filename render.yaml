@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: mantlemind-backend
+    name: hashmind-backend
     env: python
     rootDir: backend
     buildCommand: pip install -r requirements.txt
@@ -12,5 +12,5 @@ services:
         sync: false
       - key: CONTRACT_ADDRESS
         sync: false
-      - key: MANTLE_RPC
-        value: https://rpc.sepolia.mantle.xyz
+      - key: HASHKEY_RPC
+        value: https://mainnet.hsk.xyz

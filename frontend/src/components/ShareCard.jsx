@@ -1,11 +1,11 @@
 function ShareCard({ recommendation }) {
   const handleShareTwitter = () => {
     const text = encodeURIComponent(
-      `Just got my AI DeFi analysis from MantleMind 🤖⛓️\n\n` +
+      `🤖 3 AI agents just reached consensus on HashKey Chain!\n\n` +
       `Top pick: ${recommendation.action}\n` +
       `Confidence: ${recommendation.confidence}%\n` +
-      `Recorded forever on @0xMantle\n\n` +
-      `#MantleMind #TuringTest2026 #DeFiAI\n\n` +
+      `Every vote is on-chain forever — powered by @HashKeyGlobal\n\n` +
+      `#HashMind #HashKeyChain #DeFiAI #TuringTest2026\n\n` +
       `Try free: ${window.location.origin}`
     )
     window.open(`https://twitter.com/intent/tweet?text=${text}`, '_blank')
@@ -13,11 +13,11 @@ function ShareCard({ recommendation }) {
 
   const handleShareCopy = () => {
     const text =
-      `Just got my AI DeFi analysis from MantleMind 🤖⛓️\n\n` +
+      `🤖 3 AI agents just reached consensus on HashKey Chain!\n\n` +
       `Top pick: ${recommendation.action}\n` +
       `Confidence: ${recommendation.confidence}%\n` +
-      `Recorded forever on @0xMantle\n\n` +
-      `#MantleMind #TuringTest2026 #DeFiAI\n\n` +
+      `Every vote is on-chain forever — powered by @HashKeyGlobal\n\n` +
+      `#HashMind #HashKeyChain #DeFiAI #TuringTest2026\n\n` +
       `Try free: ${window.location.origin}`
 
     navigator.clipboard.writeText(text).then(() => {
@@ -36,7 +36,7 @@ function ShareCard({ recommendation }) {
           </div>
           <div>
             <h3 className="font-syne font-semibold text-lg">Share Your Analysis</h3>
-            <p className="text-sm text-text-secondary">Help spread the word about MantleMind</p>
+            <p className="text-sm text-text-secondary">Help spread the word about HashMind</p>
           </div>
         </div>
 

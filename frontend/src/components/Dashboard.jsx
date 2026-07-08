@@ -3,6 +3,7 @@ import RecommendationCard from './RecommendationCard'
 import ShareCard from './ShareCard'
 import AgentActivity from './AgentActivity'
 import AIAdvisor from './AIAdvisor'
+import ConsensusPanel from './ConsensusPanel'
 import axios from 'axios'
 
 /* ═══════════════════════════════════════════════════════
@@ -165,7 +166,7 @@ function IdentityPassport({ address, walletData }) {
                 fontSize: 8, padding: '2px 8px', borderRadius: 100,
                 background: `${id.color1}10`, border: `1px solid ${id.color1}28`,
                 color: '#7B7368', fontFamily: '"JetBrains Mono",monospace', letterSpacing: '0.12em'
-              }}>MANTLE · 5003</span>
+              }}>HASHKEY · 177</span>
             </div>
 
             <div style={{
@@ -206,10 +207,10 @@ function IdentityPassport({ address, walletData }) {
               </div>
               <div style={{ fontSize: 9, color: '#7B7368', fontFamily: '"JetBrains Mono",monospace', letterSpacing: '0.16em', textTransform: 'uppercase', marginTop: 4 }}>Reputation</div>
             </div>
-            {walletData?.balance_mnt !== undefined && (
+            {walletData?.balance_hsk !== undefined && (
               <div style={{ textAlign: 'center' }}>
                 <div style={{ fontSize: 34, fontWeight: 700, color: '#0BBDCA', fontFamily: '"JetBrains Mono",monospace', lineHeight: 1, letterSpacing: '-0.02em' }}>
-                  {Number(walletData.balance_mnt).toFixed(1)}
+                  {Number(walletData.balance_hsk).toFixed(1)}
                 </div>
                 <div style={{ fontSize: 9, color: '#7B7368', fontFamily: '"JetBrains Mono",monospace', letterSpacing: '0.16em', textTransform: 'uppercase', marginTop: 4 }}>MNT</div>
               </div>
@@ -250,9 +251,8 @@ function IdentityPassport({ address, walletData }) {
    APY COMPARISON CHART
 ═══════════════════════════════════════════════════════ */
 const PROTO_COLORS = {
-  'Merchant Moe': '#C9A84C', 'Agni Finance': '#0BBDCA', 'mETH': '#1B7A51',
-  'MNT Staking': '#C9A84C', 'mETH Protocol': '#1B7A51', 'Fluxion': '#8B5CF6',
-  'MNT Protocol': '#C9A84C',
+  'veHSK Governance': '#C9A84C', 'WoofSwap DEX': '#0BBDCA', 'stHSK Liquid Staking': '#1B7A51',
+  'HSK Staking': '#C9A84C', 'HSK Native Staking': '#8B5CF6', 'HashKey Chain Ecosystem': '#0BBDCA',
 }
 
 function APYChart({ recommendations }) {
@@ -323,7 +323,7 @@ function AgentDecisionHero({ recommendation }) {
       animation: 'rise 0.5s ease-out both',
     }}>
       <div style={{ fontSize: 9, color: '#C9A84C', fontFamily: '"JetBrains Mono",monospace', letterSpacing: '0.22em', textTransform: 'uppercase', marginBottom: 12 }}>
-        ◆ Top AI Decision · Mantle DeFi
+        ◆ Top AI Decision · HashKey Chain DeFi
       </div>
       <div style={{
         fontSize: 24, fontFamily: '"DM Serif Display", Georgia, serif', fontStyle: 'italic',
@@ -395,18 +395,18 @@ function AgentReputationCard({ agentStats }) {
               {agentStats.name} <span style={{ color: '#7B7368', fontWeight: 400, fontSize: 12 }}>v{agentStats.version}</span>
             </div>
             <div style={{ fontSize: 10, color: '#7B7368', fontFamily: '"JetBrains Mono",monospace' }}>
-              <span style={{ color: '#C9A84C', fontWeight: 700 }}>{agentStats.total_recommendations ?? 0}</span> on-chain
+              <span style={{ color: '#C9A84C', fontWeight: 700 }}>{agentStats.total_consensus ?? 0}</span> on-chain
               {agentStats.source === 'on-chain' && <span style={{ marginLeft: 8, color: '#1B7A51' }}>● live</span>}
             </div>
           </div>
         </div>
         <div style={{ fontSize: 11, fontFamily: '"JetBrains Mono",monospace', textAlign: 'right' }}>
-          <div style={{ color: '#7B7368', marginBottom: 2 }}>mETH rate</div>
-          <div style={{ color: '#C9A84C', fontWeight: 700 }}>1 mETH ≈ {Number(agentStats.meth_exchange_rate ?? 1.035).toFixed(4)} ETH</div>
-          <div style={{ color: '#7B7368', fontSize: 9 }}>{agentStats.meth_apy_hint ?? '3.5-4.5%'} APY</div>
+          <div style={{ color: '#7B7368', marginBottom: 2 }}>stHSK APY</div>
+          <div style={{ color: '#0BBDCA', fontWeight: 700 }}>6–10%</div>
+          <div style={{ color: '#7B7368', fontSize: 9 }}>HashKey Chain Mainnet</div>
           {agentStats.explorer_url && (
             <a href={agentStats.explorer_url} target="_blank" rel="noopener noreferrer"
-              style={{ color: '#C9A84C', fontSize: 9, textDecoration: 'none', display: 'block', marginTop: 2 }}>
+              style={{ color: '#0BBDCA', fontSize: 9, textDecoration: 'none', display: 'block', marginTop: 2 }}>
               View contract ↗
             </a>
           )}
@@ -420,14 +420,15 @@ function AgentReputationCard({ agentStats }) {
    DEMO DATA
 ═══════════════════════════════════════════════════════ */
 const DEMO_WALLET_DATA = {
-  balance_mnt: 12.45, total_tx_count: 23,
+  balance_hsk: 500.0, total_tx_count: 23,
   risk_profile: 'moderate', activity_level: 'active',
-  tokens: { USDT: 0, USDC: 0, mETH: 0 },
+  tokens: { USDT: 200, WETH: 0.12, stHSK: 100, veHSK: 0, WHSK: 50 },
+  chain: 'HashKey Chain', chain_id: 177,
 }
 const DEMO_RECOMMENDATIONS = [
-  { action: 'Explore Merchant Moe DEX', reasoning: 'Your moderate risk profile suits active trading. Merchant Moe offers deep liquidity for MNT pairs.', confidence: 78, risk_level: 'medium', specific_protocol: 'Merchant Moe', estimated_apy: '' },
-  { action: 'Stake ETH via mETH', reasoning: 'Earn staking rewards while staying liquid. mETH lets your ETH work harder on Mantle.', confidence: 82, risk_level: 'low', specific_protocol: 'mETH', estimated_apy: '3-5%' },
-  { action: 'Lend on Agni Finance', reasoning: 'Supply stablecoins to Agni Finance for consistent yield with minimal impermanent loss risk.', confidence: 71, risk_level: 'low', specific_protocol: 'Agni Finance', estimated_apy: '2-6%' },
+  { action: 'Stake HSK as stHSK', reasoning: 'stHSK offers 6–10% APY with no lockup. Your 500 HSK balance makes this the highest-confidence yield action on HashKey Chain.', confidence: 85, risk_level: 'low', specific_protocol: 'stHSK Liquid Staking', estimated_apy: '6-10%' },
+  { action: 'Lock stHSK in veHSK', reasoning: 'Boost your stHSK yield up to 4× through veHSK governance lock. Your moderate risk profile suits a 3-month lock.', confidence: 74, risk_level: 'medium', specific_protocol: 'veHSK Governance', estimated_apy: 'Up to 4× boost' },
+  { action: 'Provide HSK/USDT on WoofSwap', reasoning: 'WoofSwap offers 5–30% fee APY on HSK/USDT pairs. IL risk is moderate — suitable for your risk profile.', confidence: 68, risk_level: 'medium', specific_protocol: 'WoofSwap DEX', estimated_apy: '5-30%' },
 ]
 
 /* ═══════════════════════════════════════════════════════
@@ -485,10 +486,10 @@ function Dashboard({ walletAddress, walletData, recommendations, isAnalyzing, on
   const analyzeWallet = async () => {
     setLoading(true); setUsingDemo(false)
     try {
-      const r = await axios.post('/api/advise', { wallet_address: walletAddress })
-      setLocalWalletData(r.data.wallet_data)
-      setLocalRecommendations(r.data.recommendations)
-      onAnalysisComplete(r.data.wallet_data, r.data.recommendations)
+      const r = await axios.post('/api/analyze', { wallet_address: walletAddress })
+      setLocalWalletData(r.data)
+      setLocalRecommendations([])
+      onAnalysisComplete(r.data, [])
     } catch {
       setLocalWalletData(DEMO_WALLET_DATA)
       setLocalRecommendations(DEMO_RECOMMENDATIONS)
@@ -500,16 +501,24 @@ function Dashboard({ walletAddress, walletData, recommendations, isAnalyzing, on
   const handleAnalyze = () => { onAnalyze(); analyzeWallet() }
 
   const handleAgentRun = async () => {
+    // Now redirects users to the ConsensusPanel below — no separate agent run
     setAgentRunning(true); setAgentResult(null)
     try {
-      const r = await axios.post('/api/agent/run', { wallet_address: walletAddress })
-      setAgentResult(r.data)
-      if (r.data.all_recommendations?.length > 0) {
-        setLocalRecommendations(r.data.all_recommendations)
-        setLocalWalletData(prev => ({ ...prev, ...r.data.wallet_profile }))
-      }
+      const r = await axios.post('/api/consensus', { wallet_address: walletAddress })
+      setAgentResult({
+        agent_id: 'hashmind-consensus-v2',
+        agent_decision: {
+          action_taken: r.data.consensus?.final_action,
+          protocol:     r.data.agents?.yield?.signal,
+          confidence:   r.data.consensus?.aggregated_confidence,
+          reasoning:    r.data.consensus?.summary,
+          executed:     r.data.consensus?.reached,
+          mock:         true,
+        },
+        wallet_profile: r.data.wallet_profile,
+      })
     } catch {
-      setAgentResult({ error: 'Agent could not run — backend may be offline.' })
+      setAgentResult({ error: 'Consensus agents unavailable — backend may be offline.' })
     } finally { setAgentRunning(false) }
   }
 
@@ -525,7 +534,7 @@ function Dashboard({ walletAddress, walletData, recommendations, isAnalyzing, on
           Analyzing your on-chain history…
         </h2>
         <p style={{ color: '#7B7368', fontSize: 13, fontFamily: '"JetBrains Mono",monospace' }}>
-          Reading Mantle · Fetching live APY · Generating identity
+          Reading HashKey Chain · Fetching live APY · Generating identity
         </p>
       </div>
     )
@@ -551,9 +560,9 @@ function Dashboard({ walletAddress, walletData, recommendations, isAnalyzing, on
       {/* ③ Bento stats + action buttons */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 10, marginBottom: 16 }}>
         <div className="bento-card" style={{ padding: '18px 20px' }}>
-          <div style={{ fontSize: 9, color: '#7B7368', fontFamily: '"JetBrains Mono",monospace', letterSpacing: '0.16em', textTransform: 'uppercase', marginBottom: 7 }}>MNT Balance</div>
+          <div style={{ fontSize: 9, color: '#7B7368', fontFamily: '"JetBrains Mono",monospace', letterSpacing: '0.16em', textTransform: 'uppercase', marginBottom: 7 }}>HSK Balance</div>
           <div style={{ fontSize: 28, fontWeight: 700, color: '#C9A84C', fontFamily: '"JetBrains Mono",monospace', lineHeight: 1, marginBottom: 2 }}>
-            <AnimatedNumber value={localWalletData?.balance_mnt || 0} />
+            <AnimatedNumber value={localWalletData?.balance_hsk || 0} />
           </div>
           <div style={{ fontSize: 10, color: '#7B7368', fontFamily: '"JetBrains Mono",monospace' }}>MNT</div>
         </div>
@@ -631,7 +640,7 @@ function Dashboard({ walletAddress, walletData, recommendations, isAnalyzing, on
           </div>
           {agentResult.agent_decision?.tx_hash && (
             <div style={{ marginTop: 12, paddingTop: 12, borderTop: '1px solid rgba(201,168,76,0.10)', display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
-              <span style={{ fontSize: 11, color: '#1B7A51', fontWeight: 600 }}>✓ Logged on Mantle{agentResult.agent_decision.mock ? ' (demo)' : ''}</span>
+              <span style={{ fontSize: 11, color: '#1B7A51', fontWeight: 600 }}>✓ Logged on HashKey Chain{agentResult.agent_decision.mock ? ' (demo)' : ''}</span>
               <a href={agentResult.agent_decision.explorer_url} target="_blank" rel="noopener noreferrer"
                 style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 10, color: '#C9A84C', textDecoration: 'none' }}>
                 {agentResult.agent_decision.tx_hash.slice(0, 18)}… ↗
@@ -682,7 +691,12 @@ function Dashboard({ walletAddress, walletData, recommendations, isAnalyzing, on
         )}
       </div>
 
-      {/* ⑦ AI Advisor */}
+      {/* ⑦ Triple-Agent Consensus Panel — HashMind signature feature */}
+      <div className="bento-card" style={{ padding: '22px 24px', marginBottom: 24, borderTop: '2px solid rgba(11,189,202,0.20)' }}>
+        <ConsensusPanel walletAddress={walletAddress} />
+      </div>
+
+      {/* ⑧ AI Advisor */}
       <div style={{ marginBottom: 24 }}>
         <AIAdvisor walletAddress={walletAddress} />
       </div>

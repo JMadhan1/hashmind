@@ -17,12 +17,12 @@ function StatBox({ label, value, green, teal }) {
 
 /* ─── Constants ────────────────────────────────────────── */
 const PROTOCOLS = [
-  { name: 'mETH Protocol',  icon: '◆' },
-  { name: 'Agni Finance',   icon: '◈' },
-  { name: 'Merchant Moe',   icon: '◉' },
-  { name: 'Fluxion',        icon: '◎' },
-  { name: 'MNT Staking',    icon: '○' },
-  { name: 'Mantle Network', icon: '●' },
+  { name: 'stHSK Liquid Staking', icon: '◆' },
+  { name: 'veHSK Governance',     icon: '◈' },
+  { name: 'WoofSwap DEX',         icon: '◉' },
+  { name: 'HSK Native Staking',   icon: '○' },
+  { name: 'HashKey Chain',        icon: '●' },
+  { name: 'AlphaAgent',           icon: '◎' },
 ]
 
 const STEPS = [
@@ -33,25 +33,25 @@ const STEPS = [
         <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
       </svg>
     ),
-    desc: 'Reads on-chain activity, token balances & transaction history directly from Mantle in real-time.',
+    desc: 'Reads live wallet data, HSK balances, stHSK & veHSK positions from HashKey Chain Mainnet via Blockscout API.',
   },
   {
-    num: '02', title: 'Reason', color: '#0BBDCA',
+    num: '02', title: 'Deliberate', color: '#0BBDCA',
     icon: (
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
         <path d="M12 2a7 7 0 0 1 7 7c0 2.38-1.19 4.47-3 5.74V17a2 2 0 0 1-2 2H10a2 2 0 0 1-2-2v-2.26C6.19 13.47 5 11.38 5 9a7 7 0 0 1 7-7z"/><path d="M10 21h4"/>
       </svg>
     ),
-    desc: 'Groq AI synthesises live APY data from mETH, Agni Finance, Merchant Moe & MNT Staking.',
+    desc: 'Three specialist AI agents — AlphaAgent, YieldAgent, GuardAgent — independently analyse market, yield, and risk.',
   },
   {
-    num: '03', title: 'Decide', color: '#1B7A51',
+    num: '03', title: 'Consensus', color: '#1B7A51',
     icon: (
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
         <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
       </svg>
     ),
-    desc: 'Agent autonomously scores each action by expected yield versus your on-chain risk profile.',
+    desc: '2-of-3 agents must vote EXECUTE before any signal fires. No single AI can move capital alone.',
   },
   {
     num: '04', title: 'Prove', color: '#8B5CF6',
@@ -60,7 +60,7 @@ const STEPS = [
         <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
       </svg>
     ),
-    desc: 'Full decision + reasoning logged permanently on Mantle. Auditable by anyone. Forever.',
+    desc: 'All 3 agent votes are written to HashMind.sol on HashKey Chain — immutable, auditable, forever.',
   },
 ]
 
@@ -77,10 +77,10 @@ function App() {
 
   useEffect(() => {
     const fetchStats = () => {
-      axios.get('/api/mantle/stats')
+      axios.get('/api/hashkey/stats')
         .then(r => {
           setLiveStats(r.data)
-          if (r.data.total_recommendations > 0) setGlobalCount(r.data.total_recommendations)
+          if (r.data.total_consensus > 0) setGlobalCount(r.data.total_consensus)
         })
         .catch(() => {})
     }
@@ -120,8 +120,8 @@ function App() {
               <span style={{ color: '#07080C', fontWeight: 800, fontSize: 17, fontFamily: '"Space Grotesk",sans-serif' }}>M</span>
             </div>
             <div>
-              <div style={{ fontWeight: 700, fontSize: 15, fontFamily: '"Space Grotesk",sans-serif', letterSpacing: '-0.02em', color: '#E8E2D8' }}>MantleMind</div>
-              <div style={{ fontSize: 9, color: '#7B7368', fontFamily: '"JetBrains Mono",monospace', letterSpacing: '0.10em', textTransform: 'uppercase' }}>AI Agent · Mantle</div>
+              <div style={{ fontWeight: 700, fontSize: 15, fontFamily: '"Space Grotesk",sans-serif', letterSpacing: '-0.02em', color: '#E8E2D8' }}>HashMind</div>
+              <div style={{ fontSize: 9, color: '#7B7368', fontFamily: '"JetBrains Mono",monospace', letterSpacing: '0.10em', textTransform: 'uppercase' }}>AI Agent · HashKey Chain</div>
             </div>
           </div>
 
@@ -180,7 +180,7 @@ function App() {
                 {/* Live badge */}
                 <div className="neon-badge animate-fade-in" style={{ marginBottom: 36 }}>
                   <span className="live-dot" />
-                  LIVE ON MANTLE SEPOLIA · CONTRACT DEPLOYED
+                  LIVE ON HASHKEY CHAIN MAINNET · CONTRACT DEPLOYED
                 </div>
 
                 {/* Serif display heading — Trend 1: institutional typography */}
@@ -211,13 +211,13 @@ function App() {
                     fontFamily: '"Space Grotesk", sans-serif',
                   }}
                 >
-                  MantleMind
+                  HashMind
                 </h1>
 
                 <p style={{ color: '#7B7368', maxWidth: 540, fontSize: 15, lineHeight: 1.78, marginBottom: 48 }}>
                   The first AI agent that builds a{' '}
                   <span style={{ color: '#C9A84C', fontWeight: 600 }}>verifiable on-chain reputation</span>.
-                  {' '}Every recommendation — confidence score, reasoning, proof — stored permanently on Mantle.
+                  {' '}Every recommendation — confidence score, reasoning, proof — stored permanently on HashKey Chain.
                   <br /><br />
                   <span style={{ color: '#3E3A36', fontSize: 13 }}>
                     Not just AI advice.{' '}
@@ -257,7 +257,7 @@ function App() {
                     <span style={{ width: 7, height: 7, borderRadius: '50%', flexShrink: 0, background: '#1B7A51', boxShadow: '0 0 8px #1B7A51', display: 'inline-block' }} />
                     <span style={{ color: '#7B7368' }}>
                       <span style={{ color: '#1B7A51', fontWeight: 700 }}>{globalCount.toLocaleString()}</span>
-                      {' '}AI decisions recorded on Mantle
+                      {' '}AI decisions recorded on HashKey Chain
                     </span>
                   </div>
                 )}
@@ -348,7 +348,7 @@ function App() {
             <section style={{ padding: '80px 24px', borderTop: '1px solid rgba(201,168,76,0.07)' }}>
               <div style={{ maxWidth: 1200, margin: '0 auto' }}>
                 <div style={{ textAlign: 'center', marginBottom: 56 }}>
-                  <div className="section-eyebrow" style={{ marginBottom: 22 }}>WHY MANTLEMIND</div>
+                  <div className="section-eyebrow" style={{ marginBottom: 22 }}>WHY HASHMIND</div>
                   <h2 style={{ fontSize: 'clamp(1.8rem,4vw,2.8rem)', fontWeight: 700, letterSpacing: '-0.025em', fontFamily: '"Space Grotesk",sans-serif', color: '#E8E2D8' }}>
                     Built Different.{' '}
                     <span className="gradient-text-static">Provably Better.</span>
@@ -366,7 +366,7 @@ function App() {
                         <div style={{ fontSize: 10, color: '#C9A84C', fontFamily: '"JetBrains Mono",monospace', letterSpacing: '0.15em', marginBottom: 6, textTransform: 'uppercase' }}>Core Feature · 01</div>
                         <h3 style={{ fontSize: 22, fontWeight: 700, color: '#E8E2D8', letterSpacing: '-0.02em', marginBottom: 8, fontFamily: '"Space Grotesk",sans-serif' }}>Radical Transparency</h3>
                         <p style={{ fontSize: 14, color: '#7B7368', lineHeight: 1.75, maxWidth: 420 }}>
-                          Every AI decision is a public on-chain event. Anyone can verify what MantleMind recommended — confidence score, wallet analyzed, reasoning — from day one to now.
+                          Every AI decision is a public on-chain event. Anyone can verify what HashMind recommended — confidence score, wallet analyzed, reasoning — from day one to now.
                         </p>
                       </div>
                     </div>
@@ -391,7 +391,7 @@ function App() {
                           {globalCount && <div>Decisions <span style={{ color: '#1B7A51', fontWeight: 700 }}>{globalCount}</span></div>}
                         </>
                       ) : (
-                        <div style={{ color: '#3E3A36' }}>Connecting to Mantle…</div>
+                        <div style={{ color: '#3E3A36' }}>Connecting to HashKey Chain…</div>
                       )}
                     </div>
                   </div>
@@ -447,7 +447,7 @@ function App() {
               background: 'rgba(0,0,0,0.25)', overflow: 'hidden',
             }}>
               <div style={{ textAlign: 'center', marginBottom: 26 }}>
-                <span className="section-eyebrow">INTEGRATED MANTLE PROTOCOLS</span>
+                <span className="section-eyebrow">INTEGRATED HASHKEY PROTOCOLS</span>
               </div>
               <div className="ticker-wrap">
                 <div className="ticker-track">
@@ -470,7 +470,7 @@ function App() {
                     Your Wallet Has a <span className="gradient-text-static">Unique Identity</span>
                   </h2>
                   <p style={{ color: '#7B7368', fontSize: 13, maxWidth: 420, margin: '0 auto' }}>
-                    Connect your wallet and MantleMind generates a personalized profile — colors, archetype, and reputation score — directly from your on-chain history.
+                    Connect your wallet and HashMind generates a personalized profile — colors, archetype, and reputation score — directly from your on-chain history.
                   </p>
                 </div>
 
@@ -580,18 +580,18 @@ function App() {
       <footer style={{ borderTop: '1px solid rgba(201,168,76,0.10)', padding: '28px 24px', background: 'rgba(0,0,0,0.22)' }}>
         <div style={{ maxWidth: 1280, margin: '0 auto', display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: 16 }}>
           <div>
-            <div style={{ fontSize: 14, fontWeight: 700, color: '#C9A84C', fontFamily: '"Space Grotesk",sans-serif', marginBottom: 5 }}>MantleMind</div>
+            <div style={{ fontSize: 14, fontWeight: 700, color: '#C9A84C', fontFamily: '"Space Grotesk",sans-serif', marginBottom: 5 }}>HashMind</div>
             <div style={{ fontSize: 11, color: '#7B7368', fontFamily: '"JetBrains Mono",monospace', letterSpacing: '0.04em' }}>
               Built for <span style={{ color: '#6D28D9', fontWeight: 600 }}>Turing Test Hackathon 2026</span> · Consumer &amp; Viral DApps Track
             </div>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 18, fontSize: 12, color: '#7B7368', flexWrap: 'wrap' }}>
             <span>Powered by</span>
-            <span style={{ color: '#C9A84C', fontWeight: 600 }}>Mantle Network</span>
+            <span style={{ color: '#C9A84C', fontWeight: 600 }}>HashKey Chain</span>
             <span style={{ color: 'rgba(201,168,76,0.20)' }}>·</span>
             <span style={{ color: '#0BBDCA', fontWeight: 600 }}>Groq AI</span>
             <span style={{ color: 'rgba(201,168,76,0.20)' }}>·</span>
-            <a href="https://github.com/jmadh/mantlemind" target="_blank" rel="noopener noreferrer"
+            <a href="https://github.com/jmadh/hashmind" target="_blank" rel="noopener noreferrer"
               style={{ color: '#C9A84C', textDecoration: 'none', fontWeight: 600 }}>
               Open Source ↗
             </a>

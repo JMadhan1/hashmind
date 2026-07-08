@@ -1,14 +1,14 @@
 import { useState, useEffect } from 'react'
 import { ethers } from 'ethers'
 
-const MANTLE_CHAIN_ID  = '0x138B'
-const MANTLE_CHAIN_NUM = 5003
-const MANTLE_NETWORK = {
-  chainId: MANTLE_CHAIN_ID,
-  chainName: 'Mantle Sepolia Testnet',
-  nativeCurrency: { name: 'MNT', symbol: 'MNT', decimals: 18 },
-  rpcUrls: ['https://rpc.sepolia.mantle.xyz'],
-  blockExplorerUrls: ['https://explorer.sepolia.mantle.xyz'],
+const HASHKEY_CHAIN_ID  = '0xb1'
+const HASHKEY_CHAIN_NUM = 177
+const HASHKEY_NETWORK = {
+  chainId: HASHKEY_CHAIN_ID,
+  chainName: 'HashKey Chain Mainnet',
+  nativeCurrency: { name: 'HSK', symbol: 'HSK', decimals: 18 },
+  rpcUrls: ['https://mainnet.hsk.xyz'],
+  blockExplorerUrls: ['https://hsk.blockscout.com'],
 }
 
 /**
@@ -60,12 +60,12 @@ async function resolveMetaMaskProvider() {
   return null
 }
 
-const switchToMantle = async (raw) => {
+const switchToHashKeyChain = async (raw) => {
   try {
-    await raw.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: MANTLE_CHAIN_ID }] })
+    await raw.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: HASHKEY_CHAIN_ID }] })
   } catch (e) {
     if (e.code === 4902 || e.code === -32603) {
-      await raw.request({ method: 'wallet_addEthereumChain', params: [MANTLE_NETWORK] })
+      await raw.request({ method: 'wallet_addEthereumChain', params: [HASHKEY_NETWORK] })
     } else {
       throw e
     }
@@ -115,8 +115,8 @@ function WalletConnect({ onConnect, walletAddress }) {
 
       // Step 3: check chain via raw RPC (no BrowserProvider yet — avoids NETWORK_ERROR)
       const chainHex = await raw.request({ method: 'eth_chainId' })
-      if (parseInt(chainHex, 16) !== MANTLE_CHAIN_NUM) {
-        await switchToMantle(raw)
+      if (parseInt(chainHex, 16) !== HASHKEY_CHAIN_NUM) {
+        await switchToHashKeyChain(raw)
         await new Promise((r) => setTimeout(r, 600))
       }
 
@@ -155,7 +155,7 @@ function WalletConnect({ onConnect, walletAddress }) {
             style={{ background: 'rgba(201,168,76,0.05)', border: '1px solid rgba(201,168,76,0.15)' }}
           >
             <span className="live-dot" style={{ width: 5, height: 5 }} />
-            <span style={{ color: '#C9A84C' }}>{balance} MNT</span>
+            <span style={{ color: '#C9A84C' }}>{balance} HSK</span>
           </div>
         )}
         <div

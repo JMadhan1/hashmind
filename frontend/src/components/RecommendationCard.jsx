@@ -52,7 +52,7 @@ function GasDisclosureWizard({ recommendation, onConfirm, onCancel }) {
   const fetchGas = async () => {
     setEstimating(true)
     try {
-      const r = await axios.get('/api/mantle/stats')
+      const r = await axios.get('/api/hashkey/stats')
       setGasData({
         priceGwei: parseFloat(r.data.gas_price_gwei || 0.02),
         blockNumber: r.data.block_number,
@@ -89,7 +89,7 @@ function GasDisclosureWizard({ recommendation, onConfirm, onCancel }) {
             <div><span style={{ color: '#C9A84C' }}>Protocol:</span> {recommendation.specific_protocol}</div>
             <div><span style={{ color: '#C9A84C' }}>Risk:</span> {recommendation.risk_level?.toUpperCase()}</div>
             <div style={{ marginTop: 8, color: '#4A4540', fontSize: 10, lineHeight: 1.6 }}>
-              This will write a recommendation hash to <span style={{ color: '#7B7368' }}>MantleMind.sol</span> on Mantle Sepolia.
+              This will write a recommendation hash to <span style={{ color: '#7B7368' }}>HashMind.sol</span> on HashKey Chain Mainnet.
               No funds will be moved — only metadata is stored.
             </div>
           </div>
@@ -131,7 +131,7 @@ function GasDisclosureWizard({ recommendation, onConfirm, onCancel }) {
             </div>
           </div>
           <div style={{ fontSize: 10, color: '#4A4540', fontFamily: '"JetBrains Mono",monospace', marginBottom: 12, lineHeight: 1.65 }}>
-            Contract: MantleMind.sol · Network: Mantle Sepolia (5003)<br/>
+            Contract: HashMind.sol · Network: HashKey Chain Mainnet (177)<br/>
             Block: {gasData?.blockNumber?.toLocaleString?.() ?? gasData?.blockNumber}
           </div>
           <div style={{ display: 'flex', gap: 8 }}>
@@ -157,7 +157,7 @@ function GasDisclosureWizard({ recommendation, onConfirm, onCancel }) {
           </div>
           <div style={{ display: 'flex', gap: 8 }}>
             <button onClick={onConfirm} className="btn-primary" style={{ fontSize: 12, padding: '7px 14px', flex: 1, justifyContent: 'center' }}>
-              Sign & Log to Mantle
+              Sign & Log to HashKey Chain
             </button>
             <button onClick={() => setStep(1)} className="btn-ghost" style={{ fontSize: 12, padding: '7px 14px' }}>Back</button>
           </div>
@@ -204,11 +204,11 @@ function RecommendationCard({ recommendation }) {
   const confFill    = isHigh ? 'confidence-high' : isMed ? 'confidence-medium' : 'confidence-low'
 
   const PROTOCOL_ICONS = {
-    'Merchant Moe': '◈',
-    'Agni Finance':  '◉',
-    'Fluxion':       '◎',
-    'mETH':          '◆',
-    'Mantle Ecosystem': '○',
+    'veHSK Governance':     '◈',
+    'WoofSwap DEX':         '◉',
+    'HSK Native Staking':   '◎',
+    'stHSK Liquid Staking': '◆',
+    'HashKey Chain Ecosystem': '○',
   }
   const icon = PROTOCOL_ICONS[recommendation.specific_protocol] || '●'
 
@@ -298,10 +298,10 @@ function RecommendationCard({ recommendation }) {
             padding: '10px 16px', borderRadius: 8, fontSize: 13, fontWeight: 600,
             background: 'rgba(27,122,81,0.10)', border: '1px solid rgba(27,122,81,0.28)', color: '#1B7A51',
           }}>
-            ✓ Logged on Mantle
+            ✓ Logged on HashKey Chain
           </div>
           <a
-            href={`https://explorer.sepolia.mantle.xyz/tx/${txHash}`}
+            href={`https://hsk.blockscout.com/tx/${txHash}`}
             target="_blank" rel="noopener noreferrer"
             style={{ textAlign: 'center', fontSize: 10, color: '#C9A84C', textDecoration: 'none', fontFamily: '"JetBrains Mono",monospace', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}
           >
@@ -332,7 +332,7 @@ function RecommendationCard({ recommendation }) {
             <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
             <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
           </svg>
-          Log to Mantle
+          Log to HashKey Chain
         </button>
       ) : null}
 

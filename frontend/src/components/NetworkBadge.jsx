@@ -14,7 +14,7 @@ function NetworkBadge() {
 
   const fetchStats = async () => {
     try {
-      const r = await axios.get('/api/mantle/stats')
+      const r = await axios.get('/api/hashkey/stats')
       setStats(r.data)
     } catch (_) {}
   }
@@ -27,8 +27,8 @@ function NetworkBadge() {
       style={{
         padding: '5px 14px',
         borderRadius: 8,
-        background: 'rgba(201,168,76,0.04)',
-        border: '1px solid rgba(201,168,76,0.14)',
+        background: 'rgba(11,189,202,0.04)',
+        border: '1px solid rgba(11,189,202,0.18)',
         fontFamily: '"JetBrains Mono", monospace',
         fontSize: 11,
         gap: 10,
@@ -45,35 +45,44 @@ function NetworkBadge() {
         display: 'inline-block',
       }} />
 
-      <span style={{ color: '#7B7368' }}>Mantle Sepolia</span>
+      <span style={{ color: '#7B7368' }}>HashKey Chain</span>
 
-      <span style={{ color: 'rgba(201,168,76,0.20)', fontWeight: 300 }}>|</span>
+      <span style={{ color: 'rgba(11,189,202,0.25)', fontWeight: 300 }}>|</span>
 
       <span style={{ color: '#7B7368' }}>
         Block{' '}
-        <span style={{ color: '#C9A84C', fontWeight: 600 }}>
-          {Number(stats.block_number).toLocaleString()}
+        <span style={{ color: '#0BBDCA', fontWeight: 600 }}>
+          {Number(stats.block_number || 0).toLocaleString()}
         </span>
       </span>
 
-      <span style={{ color: 'rgba(201,168,76,0.20)', fontWeight: 300 }}>|</span>
+      <span style={{ color: 'rgba(11,189,202,0.25)', fontWeight: 300 }}>|</span>
 
       <span style={{ color: '#7B7368' }}>
         Gas{' '}
-        <span style={{ color: '#0BBDCA', fontWeight: 600 }}>
-          {parseFloat(stats.gas_price_gwei).toFixed(4)}
+        <span style={{ color: '#00E676', fontWeight: 600 }}>
+          {parseFloat(stats.gas_price_gwei || 0.01).toFixed(2)}
         </span>
         {' '}Gwei
       </span>
 
-      {stats.total_recommendations > 0 && (
+      <span style={{ color: 'rgba(11,189,202,0.25)', fontWeight: 300 }}>|</span>
+
+      <span style={{ color: '#7B7368' }}>
+        Tx today{' '}
+        <span style={{ color: '#0BBDCA', fontWeight: 600 }}>
+          {Number(stats.transactions_today || 0).toLocaleString()}
+        </span>
+      </span>
+
+      {stats.total_consensus_logged > 0 && (
         <>
-          <span style={{ color: 'rgba(201,168,76,0.20)', fontWeight: 300 }}>|</span>
+          <span style={{ color: 'rgba(11,189,202,0.25)', fontWeight: 300 }}>|</span>
           <span style={{ color: '#7B7368' }}>
             <span style={{ color: '#1B7A51', fontWeight: 700 }}>
-              {stats.total_recommendations}
+              {stats.total_consensus_logged}
             </span>
-            {' '}on-chain
+            {' '}consensus
           </span>
         </>
       )}

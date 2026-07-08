@@ -20,7 +20,7 @@ function AgentActivity() {
   const fetchActivity = async () => {
     try {
       const response = await axios.get('/api/history')
-      setActivities(response.data.recent_actions || [])
+      setActivities(response.data.recent_consensus || [])
     } catch (err) {
       console.error('AgentActivity: failed to fetch', err)
     }
@@ -36,14 +36,32 @@ function AgentActivity() {
       </h3>
       <div className="space-y-2">
         {activities.slice(0, 5).map((activity, index) => (
-          <div key={index} className="flex items-center gap-2 text-sm text-text-secondary">
-            <span className="shrink-0">🤖</span>
-            <span>
-              AI analyzed wallet{' '}
-              <span className="mono text-accent">{activity.wallet}</span>
-              {' — '}
-              <span className="text-text-secondary/70">{getRelativeTime(activity.timestamp)}</span>
-            </span>
+          <div key={index} className="flex items-center justify-between gap-2 text-sm text-text-secondary">
+            <div className="flex items-center gap-2 min-w-0">
+              <span className="shrink-0">🤖</span>
+              <span className="truncate">
+                <span className="mono text-accent">
+                  {activity.wallet ? `${activity.wallet.slice(0, 6)}…${activity.wallet.slice(-4)}` : '—'}
+                </span>
+                {activity.action && (
+                  <span className="text-text-secondary/70 ml-1">· {activity.action.slice(0, 28)}{activity.action?.length > 28 ? '…' : ''}</span>
+                )}
+              </span>
+            </div>
+            <div className="flex items-center gap-2 shrink-0">
+              {activity.consensus ? (
+                <span style={{
+                  fontSize: 9, padding: '2px 7px', borderRadius: 100, fontFamily: '"JetBrains Mono",monospace',
+                  background: 'rgba(27,122,81,0.12)', border: '1px solid rgba(27,122,81,0.30)', color: '#1B7A51',
+                }}>CONSENSUS</span>
+              ) : (
+                <span style={{
+                  fontSize: 9, padding: '2px 7px', borderRadius: 100, fontFamily: '"JetBrains Mono",monospace',
+                  background: 'rgba(201,168,76,0.08)', border: '1px solid rgba(201,168,76,0.25)', color: '#C9A84C',
+                }}>DEFERRED</span>
+              )}
+              <span className="text-text-secondary/50 text-xs">{getRelativeTime(activity.timestamp)}</span>
+            </div>
           </div>
         ))}
       </div>
