@@ -23,6 +23,7 @@ import os
 import re
 import json
 from groq import Groq
+from openai import OpenAI
 from dotenv import load_dotenv
 from typing import Dict, List, Optional, Tuple
 
@@ -40,8 +41,16 @@ CONFIDENCE_THRESHOLD = 70   # minimum confidence for EXECUTE vote to be counted
 
 class ConsensusAgents:
     def __init__(self):
-        self.client = Groq(api_key=os.getenv("GROQ_API_KEY"))
-        self.model  = "llama-3.3-70b-versatile"
+        self.groq_client   = Groq(api_key=os.getenv("GROQ_API_KEY"))
+        self.groq_model    = "llama-3.3-70b-versatile"
+        venice_key = os.getenv("VENICE_API_KEY", "")
+        self.venice_client = OpenAI(
+            api_key=venice_key,
+            base_url="https://api.venice.ai/api/v1",
+        ) if venice_key else None
+        self.venice_model  = "venice-uncensored"
+        self.client = self.groq_client   # default for shared helpers
+        self.model  = self.groq_model
 
     # ── Public API ─────────────────────────────────────────────────────────────
 
@@ -97,7 +106,7 @@ class ConsensusAgents:
         }
 
     async def ask(self, question: str, wallet_data: Optional[Dict] = None) -> str:
-        """Conversational Q&A about HashKey Chain DeFi."""
+        """Conversational Q&A about HashKey Chain DeFi — powered by Venice AI."""
         protocol_data = await fetch_protocol_data()
         context = format_for_prompt(protocol_data)
         wallet_ctx = self._wallet_context(wallet_data)
@@ -111,12 +120,29 @@ You specialise in HSK staking, stHSK liquid staking, veHSK governance, WoofSwap 
 
 Answer in 2-4 sentences. Be specific. Reference actual APYs and protocols. If unsure, say so."""
 
+        # Try Venice AI first (uncensored, no filter on financial advice)
+        if self.venice_client:
+            try:
+                r = self.venice_client.chat.completions.create(
+                    model=self.venice_model,
+                    messages=[
+                        {"role": "system", "content": system},
+                        {"role": "user",   "content": question},
+                    ],
+                    temperature=0.5,
+                    max_tokens=400,
+                )
+                return r.choices[0].message.content.strip()
+            except Exception as e:
+                print(f"Venice ask error (falling back to Groq): {e}")
+
+        # Fallback: Groq
         try:
-            r = self.client.chat.completions.create(
-                model=self.model,
+            r = self.groq_client.chat.completions.create(
+                model=self.groq_model,
                 messages=[
-                    {"role": "system",  "content": system},
-                    {"role": "user",    "content": question},
+                    {"role": "system", "content": system},
+                    {"role": "user",   "content": question},
                 ],
                 temperature=0.5,
                 max_tokens=400,
@@ -171,7 +197,7 @@ Risk Profile: {wallet_data.get('risk_profile','unknown')}
 
 Cast your AlphaAgent vote now."""
 
-        return await self._call_agent("AlphaAgent", system, user, fallback_vote="DEFER")
+        return await self._call_agent("AlphaAgent", system, user, fallback_vote="DEFER", use_venice=True)
 
     async def _run_yield_agent(
         self,
@@ -280,18 +306,45 @@ Cast your GuardAgent risk assessment vote now."""
         system: str,
         user: str,
         fallback_vote: str = "DEFER",
+        use_venice: bool = False,
     ) -> Dict:
         try:
-            r = self.client.chat.completions.create(
-                model=self.model,
-                messages=[
-                    {"role": "system", "content": system},
-                    {"role": "user",   "content": user},
-                ],
-                temperature=0.4,
-                max_tokens=500,
-            )
-            content = r.choices[0].message.content.strip()
+            # Use Venice AI for AlphaAgent when available
+            if use_venice and self.venice_client:
+                try:
+                    r = self.venice_client.chat.completions.create(
+                        model=self.venice_model,
+                        messages=[
+                            {"role": "system", "content": system},
+                            {"role": "user",   "content": user},
+                        ],
+                        temperature=0.4,
+                        max_tokens=500,
+                    )
+                    content = r.choices[0].message.content.strip()
+                except Exception as ve:
+                    print(f"{agent_name} Venice error (falling back to Groq): {ve}")
+                    r = self.groq_client.chat.completions.create(
+                        model=self.groq_model,
+                        messages=[
+                            {"role": "system", "content": system},
+                            {"role": "user",   "content": user},
+                        ],
+                        temperature=0.4,
+                        max_tokens=500,
+                    )
+                    content = r.choices[0].message.content.strip()
+            else:
+                r = self.groq_client.chat.completions.create(
+                    model=self.groq_model,
+                    messages=[
+                        {"role": "system", "content": system},
+                        {"role": "user",   "content": user},
+                    ],
+                    temperature=0.4,
+                    max_tokens=500,
+                )
+                content = r.choices[0].message.content.strip()
 
             # Robust JSON extraction
             match = re.search(r'\{[\s\S]*\}', content)
@@ -308,6 +361,7 @@ Cast your GuardAgent risk assessment vote now."""
                 vote = fallback_vote
 
             conf = min(100, max(0, int(parsed.get("confidence", 65))))
+            provider = "venice" if (use_venice and self.venice_client) else "groq"
 
             return {
                 "agent":      agent_name,
@@ -316,6 +370,7 @@ Cast your GuardAgent risk assessment vote now."""
                 "signal":     str(parsed.get("signal", "No signal"))[:50],
                 "reasoning":  str(parsed.get("reasoning", ""))[:300],
                 "details":    str(parsed.get("details", "")),
+                "provider":   provider,
             }
 
         except Exception as e:
@@ -328,7 +383,7 @@ Cast your GuardAgent risk assessment vote now."""
             "vote":       vote,
             "confidence": 60,
             "signal":     f"{vote} — agent temporarily unavailable",
-            "reasoning":  "Groq API unavailable. Defaulting to DEFER for safety.",
+            "reasoning":  "AI provider unavailable. Defaulting to DEFER for safety.",
             "details":    "Agent is temporarily offline. Please retry.",
         }
 
