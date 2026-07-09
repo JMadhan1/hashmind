@@ -321,8 +321,8 @@ async def ask_advisor(request: AskRequest):
                 wallet_data = await wallet_analyzer.analyze(request.wallet_address)
             except Exception:
                 pass
-        answer = await consensus_agents.ask(request.question, wallet_data)
-        return {"answer": answer}
+        answer, provider = await consensus_agents.ask(request.question, wallet_data)
+        return {"answer": answer, "provider": provider}
     except Exception as e:
         raise HTTPException(500, str(e))
 

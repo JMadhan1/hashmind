@@ -105,8 +105,9 @@ class ConsensusAgents:
             "reasoning_summary":    reasoning_summary,
         }
 
-    async def ask(self, question: str, wallet_data: Optional[Dict] = None) -> str:
-        """Conversational Q&A about HashKey Chain DeFi — powered by Venice AI."""
+    async def ask(self, question: str, wallet_data: Optional[Dict] = None) -> Tuple[str, str]:
+        """Conversational Q&A about HashKey Chain DeFi — powered by Venice AI.
+        Returns (answer, provider) tuple."""
         protocol_data = await fetch_protocol_data()
         context = format_for_prompt(protocol_data)
         wallet_ctx = self._wallet_context(wallet_data)
@@ -133,7 +134,7 @@ Answer in 2-4 sentences. Be specific. Reference actual APYs and protocols. If un
                     max_tokens=400,
                     timeout=25,
                 )
-                return r.choices[0].message.content.strip()
+                return r.choices[0].message.content.strip(), "venice-uncensored"
             except Exception as e:
                 print(f"Venice ask error (falling back to Groq): {e}")
 
@@ -149,10 +150,10 @@ Answer in 2-4 sentences. Be specific. Reference actual APYs and protocols. If un
                 max_tokens=400,
                 timeout=25,
             )
-            return r.choices[0].message.content.strip()
+            return r.choices[0].message.content.strip(), "groq-llama3"
         except Exception as e:
             print(f"Ask error: {e}")
-            return "I'm having trouble connecting right now. Please try again."
+            return "I'm having trouble connecting right now. Please try again.", "none"
 
     # ── Agent Runners ──────────────────────────────────────────────────────────
 

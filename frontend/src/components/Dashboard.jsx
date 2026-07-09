@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import RecommendationCard from './RecommendationCard'
 import ShareCard from './ShareCard'
 import AgentActivity from './AgentActivity'
-import AIAdvisor from './AIAdvisor'
+import ChatPanel from './ChatPanel'
 import ConsensusPanel from './ConsensusPanel'
 import axios from 'axios'
 
@@ -698,7 +698,7 @@ function Dashboard({ walletAddress, walletData, recommendations, isAnalyzing, on
 
       {/* ⑧ AI Advisor */}
       <div style={{ marginBottom: 24 }}>
-        <AIAdvisor walletAddress={walletAddress} />
+        <ChatPanel walletAddress={walletAddress} />
       </div>
 
       {/* ⑧ Share card */}
