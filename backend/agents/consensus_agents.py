@@ -22,8 +22,8 @@ Each agent returns:
 import os
 import re
 import json
+import httpx
 from groq import Groq
-from openai import OpenAI
 from dotenv import load_dotenv
 from typing import Dict, List, Optional, Tuple
 
@@ -44,11 +44,9 @@ class ConsensusAgents:
         self.groq_client   = Groq(api_key=os.getenv("GROQ_API_KEY"))
         self.groq_model    = "llama-3.3-70b-versatile"
         venice_key = os.getenv("VENICE_API_KEY", "")
-        self.venice_client = OpenAI(
-            api_key=venice_key,
-            base_url="https://api.venice.ai/api/v1",
-        ) if venice_key else None
-        self.venice_model  = "venice-uncensored"
+        self.venice_api_key = venice_key
+        self.venice_base    = "https://api.venice.ai/api/v1"
+        self.venice_model   = "llama-3.3-70b"
         self.client = self.groq_client   # default for shared helpers
         self.model  = self.groq_model
 
@@ -122,19 +120,11 @@ You specialise in HSK staking, stHSK liquid staking, veHSK governance, WoofSwap 
 Answer in 2-4 sentences. Be specific. Reference actual APYs and protocols. If unsure, say so."""
 
         # Try Venice AI first (uncensored, no filter on financial advice)
-        if self.venice_client:
+        if self.venice_api_key:
             try:
-                r = self.venice_client.chat.completions.create(
-                    model=self.venice_model,
-                    messages=[
-                        {"role": "system", "content": system},
-                        {"role": "user",   "content": question},
-                    ],
-                    temperature=0.5,
-                    max_tokens=400,
-                    timeout=25,
-                )
-                return r.choices[0].message.content.strip(), "venice-uncensored"
+                content = await self._call_venice(system, question, max_tokens=400, temperature=0.5)
+                if content:
+                    return content, "venice-uncensored"
             except Exception as e:
                 print(f"Venice ask error (falling back to Groq): {e}")
 
@@ -312,34 +302,15 @@ Cast your GuardAgent risk assessment vote now."""
         use_venice: bool = False,
     ) -> Dict:
         try:
-            # Use Venice AI for AlphaAgent when available
-            if use_venice and self.venice_client:
+            content = None
+            # Use Venice AI when available
+            if use_venice and self.venice_api_key:
                 try:
-                    r = self.venice_client.chat.completions.create(
-                        model=self.venice_model,
-                        messages=[
-                            {"role": "system", "content": system},
-                            {"role": "user",   "content": user},
-                        ],
-                        temperature=0.4,
-                        max_tokens=500,
-                        timeout=25,
-                    )
-                    content = r.choices[0].message.content.strip()
+                    content = await self._call_venice(system, user, max_tokens=500, temperature=0.4)
                 except Exception as ve:
                     print(f"{agent_name} Venice error (falling back to Groq): {ve}")
-                    r = self.groq_client.chat.completions.create(
-                        model=self.groq_model,
-                        messages=[
-                            {"role": "system", "content": system},
-                            {"role": "user",   "content": user},
-                        ],
-                        temperature=0.4,
-                        max_tokens=500,
-                        timeout=25,
-                    )
-                    content = r.choices[0].message.content.strip()
-            else:
+                    content = None
+            if not content:
                 r = self.groq_client.chat.completions.create(
                     model=self.groq_model,
                     messages=[
@@ -367,7 +338,7 @@ Cast your GuardAgent risk assessment vote now."""
                 vote = fallback_vote
 
             conf = min(100, max(0, int(parsed.get("confidence", 65))))
-            provider = "venice-uncensored" if (use_venice and self.venice_client) else "groq-llama3"
+            provider = "venice-uncensored" if (use_venice and self.venice_api_key and content) else "groq-llama3"
 
             return {
                 "agent":      agent_name,
@@ -382,6 +353,33 @@ Cast your GuardAgent risk assessment vote now."""
         except Exception as e:
             print(f"{agent_name} error: {e}")
             return self._fallback_vote(agent_name, fallback_vote)
+
+    async def _call_venice(self, system: str, user: str, max_tokens: int = 400, temperature: float = 0.5) -> Optional[str]:
+        """Call Venice AI via httpx (avoids OpenAI pydantic parsing errors)."""
+        if not self.venice_api_key:
+            return None
+        headers = {
+            "Authorization": f"Bearer {self.venice_api_key}",
+            "Content-Type": "application/json",
+        }
+        payload = {
+            "model": self.venice_model,
+            "messages": [
+                {"role": "system", "content": system},
+                {"role": "user",   "content": user},
+            ],
+            "temperature": temperature,
+            "max_tokens": max_tokens,
+        }
+        with httpx.Client(timeout=30.0) as client:
+            resp = client.post(
+                f"{self.venice_base}/chat/completions",
+                headers=headers,
+                json=payload,
+            )
+            resp.raise_for_status()
+            data = resp.json()
+            return data["choices"][0]["message"]["content"].strip()
 
     def _fallback_vote(self, agent_name: str, vote: str) -> Dict:
         return {
