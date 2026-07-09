@@ -14,6 +14,8 @@
 [![React](https://img.shields.io/badge/React-18-0BBDCA?style=for-the-badge&logo=react&logoColor=white)](https://react.dev)
 [![Hackathon](https://img.shields.io/badge/HashKey_Chain_Horizon-Japan_2026-E05A3A?style=for-the-badge)](https://dorahacks.io/hackathon/hskchainjapan)
 
+### 🌐 [Live App](https://hashmind-three.vercel.app/) &nbsp;|&nbsp; 🎥 [Demo Video](https://youtu.be/jRvGa8zOzEA) &nbsp;|&nbsp; ⚙️ [Backend API](https://hashmind.onrender.com) &nbsp;|&nbsp; 💻 [GitHub](https://github.com/JMadhan1/hashmind)
+
 </div>
 
 ---
