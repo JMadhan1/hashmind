@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
 import axios from 'axios'
 
-const API_BASE = 'https://hashmind.onrender.com'
+const API_BASE = import.meta.env.DEV ? 'http://127.0.0.1:9773' : 'https://hashmind.onrender.com'
 
 const QUICK_QUESTIONS = [
   { label: 'Am I losing to IL?',       q: 'How does impermanent loss work in veHSK LPs and when should I be worried?' },

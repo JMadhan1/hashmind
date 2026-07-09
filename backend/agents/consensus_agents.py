@@ -104,7 +104,7 @@ class ConsensusAgents:
         }
 
     async def ask(self, question: str, wallet_data: Optional[Dict] = None) -> Tuple[str, str]:
-        """Conversational Q&A about HashKey Chain DeFi — powered by Venice AI.
+        """Conversational Q&A about HashKey Chain DeFi — powered by Groq.
         Returns (answer, provider) tuple."""
         protocol_data = await fetch_protocol_data()
         context = format_for_prompt(protocol_data)
@@ -119,16 +119,6 @@ You specialise in HSK staking, stHSK liquid staking, veHSK governance, WoofSwap 
 
 Answer in 2-4 sentences. Be specific. Reference actual APYs and protocols. If unsure, say so."""
 
-        # Try Venice AI first (uncensored, no filter on financial advice)
-        if self.venice_api_key:
-            try:
-                content = await self._call_venice(system, question, max_tokens=400, temperature=0.5)
-                if content:
-                    return content, "venice-uncensored"
-            except Exception as e:
-                print(f"Venice ask error (falling back to Groq): {e}")
-
-        # Fallback: Groq
         try:
             r = self.groq_client.chat.completions.create(
                 model=self.groq_model,
@@ -190,7 +180,7 @@ Risk Profile: {wallet_data.get('risk_profile','unknown')}
 
 Cast your AlphaAgent vote now."""
 
-        return await self._call_agent("AlphaAgent", system, user, fallback_vote="DEFER", use_venice=True)
+        return await self._call_agent("AlphaAgent", system, user, fallback_vote="DEFER")
 
     async def _run_yield_agent(
         self,
@@ -238,7 +228,7 @@ Activity Level: {wallet_data.get('activity_level','unknown')}
 
 Cast your YieldAgent vote now."""
 
-        return await self._call_agent("YieldAgent", system, user, fallback_vote="DEFER", use_venice=True)
+        return await self._call_agent("YieldAgent", system, user, fallback_vote="DEFER")
 
     async def _run_guard_agent(
         self,
@@ -289,7 +279,7 @@ Peer Agent Votes:
 
 Cast your GuardAgent risk assessment vote now."""
 
-        return await self._call_agent("GuardAgent", system, user, fallback_vote="DEFER", use_venice=True)
+        return await self._call_agent("GuardAgent", system, user, fallback_vote="DEFER")
 
     # ── Internal helpers ───────────────────────────────────────────────────────
 
@@ -302,26 +292,17 @@ Cast your GuardAgent risk assessment vote now."""
         use_venice: bool = False,
     ) -> Dict:
         try:
-            content = None
-            # Use Venice AI when available
-            if use_venice and self.venice_api_key:
-                try:
-                    content = await self._call_venice(system, user, max_tokens=500, temperature=0.4)
-                except Exception as ve:
-                    print(f"{agent_name} Venice error (falling back to Groq): {ve}")
-                    content = None
-            if not content:
-                r = self.groq_client.chat.completions.create(
-                    model=self.groq_model,
-                    messages=[
-                        {"role": "system", "content": system},
-                        {"role": "user",   "content": user},
-                    ],
-                    temperature=0.4,
-                    max_tokens=500,
-                    timeout=25,
-                )
-                content = r.choices[0].message.content.strip()
+            r = self.groq_client.chat.completions.create(
+                model=self.groq_model,
+                messages=[
+                    {"role": "system", "content": system},
+                    {"role": "user",   "content": user},
+                ],
+                temperature=0.4,
+                max_tokens=500,
+                timeout=25,
+            )
+            content = r.choices[0].message.content.strip()
 
             # Robust JSON extraction
             match = re.search(r'\{[\s\S]*\}', content)
@@ -338,7 +319,7 @@ Cast your GuardAgent risk assessment vote now."""
                 vote = fallback_vote
 
             conf = min(100, max(0, int(parsed.get("confidence", 65))))
-            provider = "venice-uncensored" if (use_venice and self.venice_api_key and content) else "groq-llama3"
+            provider = "groq-llama3"
 
             return {
                 "agent":      agent_name,

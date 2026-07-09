@@ -124,7 +124,10 @@ def format_for_prompt(protocol_data: Dict) -> str:
     """Format protocol data into a concise string for AI agent prompts."""
     lines = ["Live HashKey Chain Protocol Data:"]
     for key, p in protocol_data.items():
-        lines.append(f"\n{p['name']} ({p['type']}):")
+        name = p.get('name', key.title())
+        ptype = p.get('type', '')
+        header = f"\n{name}" + (f" ({ptype}):" if ptype else ":")
+        lines.append(header)
         for k, v in p.items():
             if k not in ("name", "type", "contract", "total_supply_raw"):
                 lines.append(f"  • {k.replace('_', ' ').title()}: {v}")

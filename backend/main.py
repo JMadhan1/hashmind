@@ -324,6 +324,8 @@ async def ask_advisor(request: AskRequest):
         answer, provider = await consensus_agents.ask(request.question, wallet_data)
         return {"answer": answer, "provider": provider}
     except Exception as e:
+        import traceback
+        traceback.print_exc()
         raise HTTPException(500, str(e))
 
 
